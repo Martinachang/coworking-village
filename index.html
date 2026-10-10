@@ -304,6 +304,19 @@ input:focus-visible{outline:2px solid var(--animal-focus);outline-offset:1px;bor
 #dock #chatSend{width:40px;height:40px}
 #chatBox{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 .dk{min-width:0;padding:2px 3px}
+/* ---- menu / collection ---- */
+.skill{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:800;font-size:13px;color:var(--animal-text)}
+.skill .bar{flex:1;min-width:90px;height:12px;border-radius:99px;background:#efe8cf;border:2px solid #e2d6b5;overflow:hidden;box-sizing:border-box}
+.skill .bar i{display:block;height:100%;background:var(--animal-primary);border-radius:99px}
+.skill small{font-weight:600;opacity:.8}
+.cup{width:56px;height:56px;display:block;margin:0 auto}
+.colgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.ct{display:grid;gap:3px;justify-items:center;text-align:center;padding:10px 6px;border-radius:18px;background:#fffdf3;border:2px solid #e2d6b5;font-size:12px;font-weight:800;color:var(--animal-text)}
+.ct .em{font-size:34px;line-height:56px;height:56px}
+.ct small{font-weight:600;opacity:.75}
+.ct.lock{filter:grayscale(1);opacity:.5}
+.ct.lock .em,.ct.lock .cup{filter:brightness(.35)}
+#mCol .sub b{color:var(--animal-primary-active)}
 @media (max-width:640px){
   #scenePill{min-width:0;padding:3px 12px;top:calc(52px + env(safe-area-inset-top,0px))}
   #sceneT{font-size:13px}
@@ -336,6 +349,13 @@ input:focus-visible{outline:2px solid var(--animal-focus);outline-offset:1px;bor
   #decor{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 }
 @media (prefers-reduced-motion:reduce){#toast,#fade{transition:none}#coins.bump{animation:none}}
+@media (max-width:640px){
+  #dock{flex-wrap:wrap;justify-content:space-between;row-gap:4px;padding:6px 8px;width:calc(100vw - 16px);border-radius:24px}
+  #dock #chatF{flex:1 1 100%;margin:0}
+  #dock #chatSend{display:grid}
+  #dock .dk{flex:1;display:flex;justify-content:center}
+  #chatBox{bottom:calc(112px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 
 <svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs><clipPath id="animal-modal-clip" clipPathUnits="objectBoundingBox"><path d="M0.501,0.005 L0.501,0.005 L0.523,0.005 L0.549,0.006 C0.704,0.01,0.796,0.017,0.825,0.027 L0.827,0.028 C0.872,0.045,0.939,0.044,0.978,0.17 C1,0.254,1,0.365,0.99,0.505 L0.988,0.513 C0.979,0.558,0.971,0.598,0.965,0.633 C0.956,0.689,0.979,0.77,0.964,0.865 C0.953,0.928,0.921,0.966,0.869,0.979 C0.821,0.986,0.773,0.992,0.726,0.995 L0.712,0.996 L0.694,0.997 C0.648,1,0.586,1,0.507,1 L0.501,1 L0.464,1 C0.385,1,0.325,0.998,0.283,0.995 C0.234,0.992,0.184,0.987,0.133,0.979 C0.081,0.966,0.05,0.928,0.039,0.865 C0.023,0.77,0.047,0.689,0.037,0.633 C0.031,0.595,0.023,0.552,0.013,0.505 C-0.006,0.365,-0.002,0.254,0.024,0.17 C0.064,0.045,0.13,0.045,0.174,0.028 L0.175,0.028 C0.204,0.017,0.303,0.009,0.474,0.005 L0.501,0.005"/></clipPath></defs></svg>
@@ -369,6 +389,7 @@ input:focus-visible{outline:2px solid var(--animal-focus);outline-offset:1px;bor
     <button class="dk" id="dMap" type="button" aria-label="地圖" title="地圖"><span class="ic"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.6A2.6 2.6 0 1 1 12 6.4a2.6 2.6 0 0 1 0 5.2z"/></svg></span></button>
     <button class="dk p" id="dWard" type="button" aria-label="衣櫥" title="衣櫥"><span class="ic"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8.5 3 3 6l2 4.5 2-1V21h10V9.5l2 1L21 6l-5.5-3c-.4 1.6-1.8 2.6-3.5 2.6S8.9 4.6 8.5 3z"/></svg></span></button>
     <button class="dk g" id="dDecor" type="button" aria-label="佈置" title="佈置"><span class="ic"><svg viewBox="0 0 24 24" fill="#fff"><path d="M5 10a2 2 0 0 1 2 2v2h10v-2a2 2 0 1 1 4 0v5H3v-5a2 2 0 0 1 2-2zm2-5h10a2 2 0 0 1 2 2v1.3A3.5 3.5 0 0 0 15.6 12H8.4A3.5 3.5 0 0 0 5 8.3V7a2 2 0 0 1 2-2zM5 18h2v2H5zm12 0h2v2h-2z"/></svg></span></button>
+    <button class="dk g" id="dCol" type="button" aria-label="圖鑑" title="圖鑑"><span class="ic"><svg viewBox="0 0 24 24" fill="#fff"><path d="M5 3.500A1.500 1.500 0 0 1 6.500 2H19v16H7a2 2 0 0 0-2 2z"/><path d="M5 20.500A1.500 1.500 0 0 0 6.500 22H19v-2.500H7a1.500 1.500 0 0 0-2 1z"/></svg></span></button>
     <button class="dk a" id="dFriends" type="button" aria-label="好友" title="好友"><span class="ic"><svg viewBox="0 0 24 24" fill="#fff"><circle cx="8.5" cy="9" r="3.5"/><circle cx="16.5" cy="10" r="3"/><path d="M2 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6zm13.6 0c0-1.8-.5-3.4-1.5-4.6.7-.3 1.5-.4 2.4-.4 3 0 5.5 2 5.5 5z"/></svg></span></button>
     <button class="dk y" id="dEmote" type="button" aria-label="表情" title="表情"><span class="ic"><svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="12" r="9.5"/><circle cx="8.8" cy="10" r="1.4" fill="#5b5856"/><circle cx="15.2" cy="10" r="1.4" fill="#5b5856"/><path d="M7.8 13.6c1 2 2.5 3 4.2 3s3.2-1 4.2-3" stroke="#5b5856" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></span></button>
   </nav>
@@ -403,6 +424,24 @@ input:focus-visible{outline:2px solid var(--animal-focus);outline-offset:1px;bor
       <p class="sub">熊老闆：「歡迎光臨！買好的傢俱會放進背包，回家按『佈置』就能擺出來喔。」</p>
       <div class="tabs" id="sTabs"></div>
       <div class="shopgrid" id="sGrid"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="mMenu" hidden>
+    <div class="sheet wide paper" role="dialog" aria-labelledby="mnT">
+      <header><h2 id="mnT">咖啡廳菜單</h2><button class="x" type="button" data-close aria-label="關閉">×</button></header>
+      <p class="sub" id="mnSay"></p>
+      <div class="skill" id="mnSkill"></div>
+      <div class="shopgrid" id="mnGrid"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="mCol" hidden>
+    <div class="sheet wide paper" role="dialog" aria-labelledby="clT">
+      <header><h2 id="clT">圖鑑</h2><button class="x" type="button" data-close aria-label="關閉">×</button></header>
+      <div class="tabs" id="cTabs"></div>
+      <p class="sub" id="cProg"></p>
+      <div class="colgrid" id="cGrid"></div>
     </div>
   </div>
 
@@ -735,12 +774,28 @@ const NPC = {
 
 /* =================== state =================== */
 const today = () => { const d = new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); };
+/* =================== cafe menu / collection data =================== */
+const DRINKS = [
+  {id:"ame",n:"美式咖啡",p:30,lv:1,col:"#6b4423",e:18,m:0,bm:1.15,bd:8},
+  {id:"lat",n:"拿鐵",p:45,lv:1,col:"#c89a6a",e:25,m:3,bm:1.2,bd:10},
+  {id:"coc",n:"熱可可",p:40,lv:1,col:"#7a4a38",e:10,m:12,bm:1.1,bd:8},
+  {id:"lem",n:"檸檬氣泡水",p:35,lv:1,col:"#e8d86a",e:15,m:6,bm:1.1,bd:8},
+  {id:"cap",n:"卡布奇諾",p:50,lv:2,col:"#b88a5e",e:28,m:4,bm:1.25,bd:10},
+  {id:"mat",n:"抹茶拿鐵",p:55,lv:2,col:"#8ac68a",e:22,m:8,bm:1.25,bd:12},
+  {id:"car",n:"焦糖瑪奇朵",p:65,lv:3,col:"#d08a3c",e:30,m:8,bm:1.3,bd:12}
+];
+const SPECIALS = [{n:"玫瑰拿鐵",col:"#e8a0a8"},{n:"桂花蜂蜜拿鐵",col:"#e8c35a"},{n:"柚香氣泡咖啡",col:"#f0b84a"},{n:"黑糖珍珠鮮奶茶",col:"#8a5a3a"}];
+const ALL_DRINK_IDS = DRINKS.map(d => d.id).concat(SPECIALS.map((x,i) => "sp"+i));
+const ITEMS = [
+  {id:"acorn",n:"橡實",e:"🌰",w:30,r:"常見"},{id:"shell",n:"貝殼",e:"🐚",w:25,r:"常見"},{id:"clover",n:"四葉草",e:"🍀",w:18,r:"少見"},{id:"leaf",n:"楓葉",e:"🍁",w:12,r:"少見"},
+  {id:"honey",n:"蜂蜜罐",e:"🍯",w:8,r:"稀有"},{id:"bell",n:"小鈴鐺",e:"🔔",w:5,r:"稀有"},{id:"star",n:"星星碎片",e:"⭐",w:3,r:"超稀有"},{id:"mush",n:"金蘑菇",e:"🍄",w:1,r:"傳說"}
+];
 const HOME_W = 1100;
 function defaultDoc(){
   return {v:2, name:"", look:{sp:0,fur:0,eye:0,nose:0,mouth:0,mark:0,hat:1,cloth:1,cc:0}, coins:500,
     ownHat:[0,1,2], ownCloth:[0,1], inv:{window:1,desk:1,plant:1,armchair:1,rug:1},
     items:[{i:"a1",k:"window",x:420,y:120},{i:"a2",k:"desk",x:640},{i:"a3",k:"plant",x:800},{i:"a4",k:"armchair",x:300},{i:"a5",k:"rug",x:470}],
-    wall:"cream", floor:"wood", ownWall:["cream"], ownFloor:["wood"], st:{day:"", focus:0, energy:80, mood:60, total:0}, at:0};
+    wall:"cream", floor:"wood", cafe:{n:0,d:{},b:{u:0,m:1},r:{d:0,i:0}}, col:{}, shk:{day:"",n:0}, ownWall:["cream"], ownFloor:["wood"], st:{day:"", focus:0, energy:80, mood:60, total:0}, at:0};
 }
 function cleanDoc(d){
   const o = defaultDoc(); if (!d || typeof d !== "object") return o;
@@ -758,6 +813,11 @@ function cleanDoc(d){
   o.floor = FLOORS[d.floor] && o.ownFloor.includes(d.floor) ? d.floor : "wood";
   const st = d.st || {}; o.st = {day: typeof st.day === "string" ? st.day.slice(0,12) : "", focus: Number.isFinite(st.focus)?clamp(st.focus,0,1440):0, energy: Number.isFinite(st.energy)?clamp(st.energy,0,100):80, mood: Number.isFinite(st.mood)?clamp(st.mood,0,100):60, total: Number.isFinite(st.total)?clamp(st.total,0,1e7):0};
   o.at = Number.isFinite(d.at) ? d.at : 0;
+  const cf = d.cafe && typeof d.cafe === "object" ? d.cafe : {}, cb = cf.b && typeof cf.b === "object" ? cf.b : {}, cr = cf.r && typeof cf.r === "object" ? cf.r : {};
+  o.cafe = {n: Number.isFinite(cf.n) ? clamp(Math.floor(cf.n),0,99999) : 0, d:{}, b:{u: Number.isFinite(cb.u) ? cb.u : 0, m: Number.isFinite(cb.m) ? clamp(cb.m,1,2) : 1}, r:{d: cr.d ? 1 : 0, i: cr.i ? 1 : 0}};
+  if (cf.d && typeof cf.d === "object") for (const k of ALL_DRINK_IDS) if (Number.isInteger(cf.d[k]) && cf.d[k] > 0) o.cafe.d[k] = Math.min(cf.d[k],9999);
+  o.col = {}; if (d.col && typeof d.col === "object") for (const it of ITEMS) if (Number.isInteger(d.col[it.id]) && d.col[it.id] > 0) o.col[it.id] = Math.min(d.col[it.id],9999);
+  const sk = d.shk && typeof d.shk === "object" ? d.shk : {}; o.shk = {day: typeof sk.day === "string" ? sk.day.slice(0,12) : "", n: Number.isFinite(sk.n) ? clamp(Math.floor(sk.n),0,99) : 0};
   return o;
 }
 let my = cleanDoc(store.get("mq.doc"));
@@ -1093,8 +1153,8 @@ function genCafe(){
   /* bar counter + baristas */
   O("counter",640,204); blk(480,160,800,204); blk(440,120,840,160);
   O("espresso",520,205); O("radio",562,205); O("cups",604,205); O("grinder",662,205); O("dome",722,205); O("register",768,205);
-  H([470,100,700,210],"跟汪汪咖啡師點咖啡",{to:[600,228], fn:()=>drinkCoffee()});
-  H([700,100,840,210],"跟喵喵店長打招呼",{to:[770,228], fn:()=>{ toast("喵喵店長：「歡迎光臨～今天也一起專注吧！」"); bumpMood(3); }});
+  H([470,100,700,210],"跟汪汪咖啡師點餐",{to:[600,228], fn:()=>openMenu("barista")});
+  H([700,100,840,210],"跟喵喵店長點餐",{to:[770,228], fn:()=>openMenu("cashier")});
   [530,600,670,740].forEach((x,i) => { O("stool",x,237); S("k-r"+i,x,238,"stool","chat",{back:true,exit:{x,y:264}}); H([x-18,208,x+18,248],"坐吧台",{seatPick:["k-r"+i]}); });
   W.npcs = [{k:"barista", lk:NPC.dog.lk, ph:2}, {k:"cashier", lk:NPC.cat.lk, ph:4}];
   /* lounge */
@@ -1346,7 +1406,7 @@ const toScreen = (wx,wy) => scene.kind === "town" ? [(wx - camX)*S, (wy - camY)*
 /* =================== player movement =================== */
 const keys = {left:false,right:false,up:false,down:false};
 function currentSeat(){ return pl.seat && scene ? (scene.seats||[]).find(s => s.id === pl.seat) : null; }
-function seatTaken(id){ for (const r of remotes.values()) if (r.sc === sceneKey && r.seat === id) return true; return false; }
+function seatTaken(id){ for (const r of remotes.values()) if (r.sc === sceneKey && r.seat === id) return true; for (const P of patronList()) if (P.seat === id) return true; return false; }
 function walkTo(x,y,act){ if (scene.kind === "town"){ townWalkTo(x,y,act); return; } if (pl.seat) standUp(); pl.tx = clamp(x, 20, scene.w-20); pl.ty = clamp(y, YMIN, YMAX); pl.act = act || null; }
 function sitAt(s){
   if (seatTaken(s.id)){ toast("這個位子有人坐了"); return; }
@@ -1399,12 +1459,13 @@ function townObjAt(wx,wy){
   if (world.cafe) return cafeObjAt(wx,wy);
   const hits = [];
   for (const b of world.buildings){ const W = b.w*TT, D = b.d*TT, x = (b.bx + b.w/2)*TT, y = (b.by + b.d)*TT, top = y - 92 - D*0.8; if (wx > x-W/2-8 && wx < x+W/2+8 && wy > top && wy < y+6) hits.push({y, b}); }
-  for (const o of world.objs){ if (o.k==="bench" && Math.abs(wx-o.x) < 30 && wy > o.y-26 && wy < o.y+8) hits.push({y:o.y+1, bench:o}); if (o.k==="sign" && Math.abs(wx-o.x) < 40 && wy > o.y-66 && wy < o.y) hits.push({y:o.y, sign:o}); }
+  for (const o of world.objs){ if (o.k==="tree" && Math.abs(wx-o.x) < 34 && wy > o.y-92 && wy < o.y+6) hits.push({y:o.y, tree:o}); if (o.k==="bench" && Math.abs(wx-o.x) < 30 && wy > o.y-26 && wy < o.y+8) hits.push({y:o.y+1, bench:o}); if (o.k==="sign" && Math.abs(wx-o.x) < 40 && wy > o.y-66 && wy < o.y) hits.push({y:o.y, sign:o}); }
   if (!hits.length) return null; hits.sort((a,b) => b.y - a.y);
   const h = hits[0];
   if (h.b){ const b = h.b, df = {x:(b.door.x+0.5)*TT, y:(b.door.y+0.6)*TT};
     if (b.key === "house"){ const nm = plotName(b); return {label: nm ? "拜訪 " + nm + " 的家" : "空地・出租中", to:[df.x,df.y], fn: () => { if (!b.owner){ toast("這塊空地還沒有人住，等新鄰居搬進來"); return; } enterScene("h:"+b.owner); }}; }
     return {label:"進入" + BDEF[b.key].name, to:[df.x,df.y], fn:()=>enterScene(BDEF[b.key].to)}; }
+  if (h.tree) return {label:"搖搖看樹", to:[h.tree.x, h.tree.y + 26], fn:() => shakeTree(h.tree)};
   if (h.bench){ const ids = world.seats.filter(s => Math.abs(s.y - h.bench.y - 4) < 2 && Math.abs(s.x - h.bench.x) < 20).map(s => s.id); return {label:"坐在長椅上", seatPick: ids}; }
   if (h.sign) return {label:"村子地圖", to:[h.sign.x, h.sign.y+20], fn:openMap};
   return null;
@@ -1521,6 +1582,7 @@ function emote(e){ lastEm = {e, t: Date.now()}; myEmUntil = performance.now() + 
 $("dEmote").addEventListener("click", e => { e.stopPropagation(); if (!popEl.hidden){ popEl.hidden = true; return; } openPop($("dEmote"), p => EMOTES.forEach(em => { const b = document.createElement("button"); b.type = "button"; const img = document.createElement("img"); img.src = emoteURL[em]; img.alt = ""; b.append(img, document.createTextNode(EMOTE_N[em])); b.addEventListener("click", () => { emote(em); popEl.hidden = true; }); p.appendChild(b); })); });
 $("dHome").addEventListener("click", () => { if (sceneKey === homeKey()) { toast("你已經在家裡了"); return; } enterScene(homeKey()); });
 $("dMap").addEventListener("click", openMap);
+$("dCol").addEventListener("click", openCol);
 $("dWard").addEventListener("click", () => openWardrobe(sceneKey === "cloth"));
 $("dDecor").addEventListener("click", () => setDecor(!decorOn));
 $("dFriends").addEventListener("click", openFriends);
@@ -1742,13 +1804,111 @@ function statTick(){
   const focusing = me.status === "focus" && ((pomo.running && pomo.mode === "work") || !!s);
   if (focusing){ st.focus += dt; st.total += dt; st.energy = Math.max(0, st.energy - 1.4*dt); }
   else if (me.status === "break" || (s && (s.t === "sofa" || s.t === "bed" || s.t === "bench"))) st.energy = Math.min(100, st.energy + 4*dt);
-  const gain = (focusing ? RATE_FOCUS : RATE_IDLE) * dt; coinAcc += gain;
+  const cm = coinMult(), gain = (focusing ? RATE_FOCUS : RATE_IDLE) * cm * dt; coinAcc += gain;
   if (coinAcc >= 1){ const n = Math.floor(coinAcc); coinAcc -= n; my.coins += n; bumpAcc += n; if (bumpAcc >= 10){ bumpAcc = 0; const el = $("coins"); el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); } }
-  $("rate").textContent = "+" + (focusing ? RATE_FOCUS : RATE_IDLE) + "/分"; $("rate").style.color = focusing ? "var(--orange)" : "var(--green)";
+  $("rate").textContent = "+" + Math.round((focusing ? RATE_FOCUS : RATE_IDLE) * cm) + "/分" + (buffMult() > 1 ? " ☕" : ""); $("rate").style.color = focusing ? "var(--orange)" : "var(--green)";
   st.mood = Math.max(0, st.mood - 0.32*dt);
   if (st.energy < 20 && !lowWarned){ lowWarned = true; toast("能量快用完了，去咖啡廳的吧台喝一杯，或坐下休息一下"); }
   if (st.energy > 40) lowWarned = false;
   updateHud(); markDirty(false); pushPresence(false);
+}
+
+/* =================== cafe: menu ordering + skill =================== */
+const SKILL_T = [0,3,8,16,30];
+const cafeLv = () => { const n = my.cafe.n; let l = 1; for (let i=1;i<SKILL_T.length;i++) if (n >= SKILL_T[i]) l = i+1; return l; };
+const skillMult = () => 1 + 0.04*(cafeLv()-1);
+const buffMult = () => (my.cafe.b.u > Date.now() ? my.cafe.b.m : 1);
+const coinMult = () => skillMult() * buffMult();
+function todaySpecial(){ const d = new Date(), i = (d.getFullYear()*372 + d.getMonth()*31 + d.getDate()) % SPECIALS.length; return {id:"sp"+i, n:"今日特調・"+SPECIALS[i].n, p:80, lv:2, col:SPECIALS[i].col, e:35, m:12, bm:1.5, bd:15}; }
+function cupSvg(col){ return '<svg class="cup" viewBox="0 0 56 56" aria-hidden="true"><ellipse cx="28" cy="50" rx="16" ry="3.5" fill="rgba(121,79,39,.15)"/><path d="M12 18h30v16a13 13 0 0 1-13 13h-4A13 13 0 0 1 12 34z" fill="#fffdf3" stroke="#794f27" stroke-width="2.4" stroke-linejoin="round"/><path d="M14 23h26v7H14z" fill="'+col+'"/><path d="M42 22h4a6 6 0 0 1 0 12h-4" fill="none" stroke="#794f27" stroke-width="2.4"/><ellipse cx="27" cy="18" rx="15" ry="4" fill="'+col+'" stroke="#794f27" stroke-width="2.4"/></svg>'; }
+function toastSeq(list){ list.forEach((m,i) => setTimeout(() => toast(m), i*2500)); }
+let menuWho = "cashier", orderBusy = false, brewUntil = 0;
+function openMenu(who){ menuWho = who; renderMenu(); openModal("mMenu"); }
+function renderMenu(){
+  const lv = cafeLv(), n = my.cafe.n, nxt = SKILL_T[lv];
+  $("mnSay").textContent = menuWho === "barista" ? "汪汪咖啡師：「想喝什麼呢？現點現做喔！」" : "喵喵店長：「歡迎光臨～今天想喝點什麼？」";
+  const pct = nxt == null ? 100 : Math.round((n - SKILL_T[lv-1]) / (nxt - SKILL_T[lv-1]) * 100);
+  $("mnSkill").innerHTML = '<span>咖啡品味 Lv.'+lv+'</span><span class="bar"><i style="width:'+pct+'%"></i></span><small>'+(nxt == null ? "已滿級" : "再點 "+(nxt-n)+" 杯升級")+'　金幣加成 +'+Math.round((skillMult()-1)*100)+'%</small>';
+  const cards = [];
+  for (const d of DRINKS.concat([todaySpecial()])){
+    const locked = lv < d.lv, el = document.createElement("div"); el.className = "item"; el.innerHTML = cupSvg(d.col) + "<b></b><small></small>";
+    el.querySelector("b").textContent = d.n;
+    el.querySelector("small").textContent = locked ? "咖啡品味 Lv."+d.lv+" 解鎖" : "能量+"+d.e+(d.m ? "　心情+"+d.m : "")+"　金幣×"+d.bm+"（"+d.bd+"分）";
+    const btn = document.createElement("button"); btn.type = "button"; btn.className = "btn orange"; btn.disabled = locked || my.coins < d.p || orderBusy; btn.append(locked ? "未解鎖" : "點 "); if (!locked) btn.append(priceTag(d.p));
+    btn.addEventListener("click", () => orderDrink(d)); el.append(btn); cards.push(el);
+  }
+  $("mnGrid").replaceChildren(...cards);
+}
+function orderDrink(d){
+  if (orderBusy){ toast("上一杯還在做喔，請稍等"); return; }
+  if (my.coins < d.p || cafeLv() < d.lv) return;
+  closeModals(); orderBusy = true; brewUntil = performance.now() + 5500;
+  addCoins(-d.p, (menuWho === "barista" ? "汪汪咖啡師" : "喵喵店長") + "：「"+d.n+"一杯～請稍等！」"); sfx("buy");
+  setTimeout(() => { orderBusy = false; deliverDrink(d); }, 5500);
+}
+function deliverDrink(d){
+  const lv0 = cafeLv(), st = my.st; st.energy = Math.min(100, st.energy + d.e); st.mood = Math.min(100, st.mood + d.m);
+  my.cafe.n++; const first = !my.cafe.d[d.id]; my.cafe.d[d.id] = (my.cafe.d[d.id]||0) + 1; my.cafe.b = {u: Date.now() + d.bd*60000, m: d.bm};
+  emote("coffee"); const msgs = [d.n + " 好了！能量 +"+d.e+"，"+d.bd+" 分鐘內金幣 ×"+d.bm];
+  if (first) msgs.push("圖鑑新增：" + d.n);
+  const lv1 = cafeLv(); if (lv1 > lv0) msgs.push("咖啡品味升到 Lv."+lv1+"！金幣加成 +"+Math.round((skillMult()-1)*100)+"%");
+  toastSeq(msgs); checkCol(); statTick(); updateHud(); markDirty(true);
+}
+
+/* =================== collection =================== */
+let colTab = "drink";
+function checkCol(){
+  if (!my.cafe.r.d && ALL_DRINK_IDS.every(k => (my.cafe.d[k]||0) > 0)){ my.cafe.r.d = 1; setTimeout(() => addCoins(300, "飲料圖鑑集滿了！獎勵 300 金幣"), 2600); }
+  if (!my.cafe.r.i && ITEMS.every(it => (my.col[it.id]||0) > 0)){ my.cafe.r.i = 1; setTimeout(() => addCoins(500, "村子小物集滿了！獎勵 500 金幣"), 2600); }
+}
+function openCol(){ renderCol(); openModal("mCol"); }
+function renderCol(){
+  $("cTabs").replaceChildren(...[["drink","飲料"],["item","村子小物"]].map(([k,n]) => { const b = document.createElement("button"); b.type = "button"; b.textContent = n; b.setAttribute("aria-selected", colTab===k ? "true" : "false"); b.addEventListener("click", () => { colTab = k; renderCol(); }); return b; }));
+  const tiles = []; let got = 0, tot = 0;
+  const tile = (icon, name, sub, owned) => { const d = document.createElement("div"); d.className = "ct" + (owned ? "" : " lock"); const ic = document.createElement("div"); if (icon.startsWith("<")) ic.innerHTML = icon; else { ic.className = "em"; ic.textContent = icon; } const b = document.createElement("b"); b.textContent = owned ? name : "？？？"; const sm = document.createElement("small"); sm.textContent = sub; d.append(ic, b, sm); return d; };
+  if (colTab === "drink"){
+    const all = DRINKS.map(d => ({id:d.id, n:d.n, col:d.col})).concat(SPECIALS.map((x,i) => ({id:"sp"+i, n:"特調・"+x.n, col:x.col})));
+    for (const d of all){ const c = my.cafe.d[d.id]||0; tot++; if (c) got++; tiles.push(tile(cupSvg(d.col), d.n, c ? "喝過 "+c+" 杯" : "還沒喝過", c > 0)); }
+    $("cProg").innerHTML = "已收集 <b>"+got+" / "+tot+"</b>　集滿 +300 金幣" + (my.cafe.r.d ? "（已領取）" : "") + "　特調每天換一款";
+  } else {
+    for (const it of ITEMS){ const c = my.col[it.id]||0; tot++; if (c) got++; tiles.push(tile(it.e, it.n, c ? "×"+c : it.r, c > 0)); }
+    $("cProg").innerHTML = "已收集 <b>"+got+" / "+tot+"</b>　集滿 +500 金幣" + (my.cafe.r.i ? "（已領取）" : "") + "　在村子裡搖樹有機會找到";
+  }
+  $("cGrid").replaceChildren(...tiles);
+}
+
+/* =================== village: shake trees =================== */
+const SHAKE_MAX = 12, shakeCool = new Map(), drops = [];
+function shakeTree(o){
+  const d = today(); if (my.shk.day !== d) my.shk = {day:d, n:0};
+  const now = performance.now(); if (now - (o.shk||0) < 900) return;
+  o.shk = now; pl.face = o.x > pl.x ? 1 : -1;
+  if (Math.hypot(pl.x - o.x, pl.y - o.y) > 110){ toast("再靠近一點才搖得到"); return; }
+  const key = o.x + "," + o.y;
+  if (Date.now() - (shakeCool.get(key)||0) < 20*60000){ toast("這棵樹還在長新的果實，晚點再來"); return; }
+  if (my.shk.n >= SHAKE_MAX){ toast("今天已經搖了 "+SHAKE_MAX+" 次，明天再來吧"); return; }
+  shakeCool.set(key, Date.now()); my.shk.n++;
+  const coins = 8 + Math.floor(Math.random()*18); let item = null;
+  if (Math.random() < 0.18){ let r = Math.random() * ITEMS.reduce((a,b) => a + b.w, 0); for (const it of ITEMS){ r -= it.w; if (r <= 0){ item = it; break; } } if (!item) item = ITEMS[0]; }
+  const n = 4 + Math.floor(Math.random()*3);
+  for (let i=0;i<n;i++) drops.push({x0:o.x + (Math.random()-0.5)*40, y0:o.y - 70 - Math.random()*14, vx:(Math.random()-0.5)*50, gy:o.y + 6 + Math.random()*16, t0:now + i*70});
+  if (item) drops.push({x0:o.x, y0:o.y - 76, vx:(Math.random()-0.5)*20, gy:o.y + 12, t0:now + 300, e:item.e});
+  setTimeout(() => { addCoins(coins); const msgs = ["搖到 "+coins+" 金幣！（今天 "+my.shk.n+"/"+SHAKE_MAX+"）"];
+    if (item){ my.col[item.id] = (my.col[item.id]||0) + 1; msgs.push("找到「"+item.n+"」（"+item.r+"）！"); checkCol(); } toastSeq(msgs); markDirty(true); }, 700);
+}
+
+/* =================== cafe regulars (company when you're alone) =================== */
+const PATRONS = [
+  {n:"小橘", seat:"k-n1", lk:{sp:3,fur:1,eye:4,nose:1,mouth:2,mark:0,hat:3,cloth:4,cc:0}, say:["加油～","再十分鐘就休息","這杯拿鐵不錯","今天也一起努力！"]},
+  {n:"阿福", seat:"k-b01", lk:{sp:6,fur:2,eye:2,nose:0,mouth:1,mark:2,hat:6,cloth:2,cc:3}, say:["在趕簡報…","(敲鍵盤)","差一點點就完成了","好香的咖啡味"]},
+  {n:"雪球", seat:"k-s3", lk:{sp:1,fur:3,eye:1,nose:2,mouth:0,mark:0,hat:4,cloth:3,cc:5}, say:["專心中","要不要一起休息？","今天進度不錯","唔…再改一下"]}
+];
+function patronList(){
+  if (sceneKey !== "cowork" || !world || !world.cafe) return [];
+  let nR = 0; for (const r of remotes.values()) if (r.sc === "cowork") nR++;
+  const act = Math.max(0, 3 - nR), out = [];
+  for (let i=0;i<act;i++){ const P = PATRONS[i]; if (pl.seat === P.seat) continue; let taken = false; for (const r of remotes.values()) if (r.sc === "cowork" && r.seat === P.seat) taken = true; if (!taken) out.push(P); }
+  return out;
 }
 let coffeeAt = 0;
 function drinkCoffee(){ if (Date.now() - coffeeAt < 5*60*1000){ toast("汪汪咖啡師：「剛喝完一杯呢，休息一下再來！」"); return; } coffeeAt = Date.now(); my.st.energy = Math.min(100, my.st.energy + 25); emote("coffee"); toast("汪汪咖啡師：「熱拿鐵來囉！」能量 +25"); updateHud(); markDirty(true); }
@@ -1908,6 +2068,9 @@ function dayLight(){ const d=new Date(), h=d.getHours()+d.getMinutes()/60; if (h
 function collectPeople(now){
   const people = [];
   for (const r of remotes.values()) if (r.sc === sceneKey) people.push({x:r.rx, y:r.ry, lk:r.lk, a:r.a, f:r.f, back:!!r.b, s:r.s, n:r.n, ph:r.ph, seat:r.seat, bubble: now < r.bubbleUntil ? r.bubble : null, em: now < r.emUntil ? r.em : null, wave: now < r.waveUntil, pm:r.pm, me:false});
+  for (const [i,P] of patronList().entries()){ const sd = world.seats.find(x => x.id === P.seat); if (!sd) continue; if (!P.nextSay) P.nextSay = now + 3000 + i*7000;
+    if (now > P.nextSay){ P.bubble = P.say[Math.floor(Math.random()*P.say.length)]; P.bubbleUntil = now + 4500; P.nextSay = now + 22000 + Math.random()*35000; }
+    people.push({x:sd.x, y:sd.y, lk:P.lk, a:"sit", f:sd.face || 1, back:!!sd.back, s:"focus", n:P.n+"・常客", ph:i*3+1, seat:P.seat, bubble: now < (P.bubbleUntil||0) ? P.bubble : null, em:null, wave:false, pm:null, me:false}); }
   people.push({x:pl.x, y:pl.y, lk:my.look, a:pl.anim, f:pl.face, back:!!pl.back, s:me.status, n:my.name || "我", ph:0, seat:pl.seat, bubble: now < myBubbleUntil ? myBubble : null, em: now < myEmUntil ? lastEm.e : null, wave: now < waveUntil, pm: pomo.running ? {m:pomo.mode, e:pomo.end} : null, me:true});
   return people;
 }
@@ -1941,7 +2104,7 @@ function hoverLabel(){
   if (lab){ WOB = 0; gx.font = `800 13px ${FONT}`; const w = gx.measureText(lab).width + 22; const lx = clamp(ptr.x + 14, 8, cw - w - 8), ly = ptr.y - 34; rr(gx, lx, ly, w, 26, 13, INK); txt(gx, lab, lx + w/2, ly + 13.5, 13, "#f7f3df", 800); WOB = 1; }
 }
 function cafeNpc(n,t){
-  if (n.k === "barista"){ const u = Math.sin(t*0.4), s = clamp(u*1.7,-1,1), paused = Math.abs(s) >= 0.98; return {x:605+s*42, y:160, face: paused ? (s<0?-1:1) : (Math.cos(t*0.4)>0?1:-1), anim: paused ? "idle" : "walk", brew: paused && s<0, cup: paused, wave:false}; }
+  if (n.k === "barista"){ if (performance.now() < brewUntil) return {x:566, y:160, face:-1, anim:"idle", brew:true, cup:false, wave:false}; const u = Math.sin(t*0.4), s = clamp(u*1.7,-1,1), paused = Math.abs(s) >= 0.98; return {x:605+s*42, y:160, face: paused ? (s<0?-1:1) : (Math.cos(t*0.4)>0?1:-1), anim: paused ? "idle" : "walk", brew: paused && s<0, cup: paused, wave:false}; }
   return {x:790, y:160, face:-1, anim:"idle", wave:(t%9)<1.3, brew:false, cup:false};
 }
 let doorArmed = false;
@@ -1979,10 +2142,18 @@ function frameTown(now, t, dt){
   const ks = 0.72;
   for (const it of items){
     if (it.n){ const q = cafeNpc(it.n,t); drawPet(gx, q.x, q.y, it.n.lk, {t, ph:it.n.ph, face:q.face, anim:q.anim, wave:q.wave, scale:ks, lw:1.5, noShadow:false}); if (q.cup){ const cxp = q.x + q.face*13, cyp = q.y - 20; rr(gx,cxp-4,cyp-6,8,7,[1,1,3,3],"#fffdf9",INK,.9); ov(gx,cxp,cyp-6,4,1.6,"#fffdf9",INK,.7); } }
-    else if (it.o){ const s = objSprite(it.o); if (s) blit(gx, s, it.o.x, it.o.y);
+    else if (it.o){ const s = objSprite(it.o); if (s){ const sa = it.o.shk ? now - it.o.shk : 9999; if (sa < 800){ gx.save(); gx.translate(it.o.x, it.o.y); gx.rotate(Math.sin(sa*0.045)*0.06*(1-sa/800)); blit(gx, s, 0, 0); gx.restore(); } else blit(gx, s, it.o.x, it.o.y); }
       if (it.o.k === "espresso"){ const brew = cafeNpc(world.npcs[0],t).brew; for (let i=0;i<5;i++){ const ph = (t*(brew?0.9:0.4)+i*0.2)%1; ov(gx, it.o.x-14 + Math.sin(t*3+i*2)*3 + i*1.5, it.o.y-104 - ph*30, 3.2+ph*3.5, 2.6+ph*2.4, `rgba(255,255,255,${(brew?0.7:0.35)*(1-ph)})`); } }
       if (it.o.k === "fountain"){ for (let i=0;i<4;i++){ const a = t*2 + i*Math.PI/2; ov(gx, it.o.x + Math.cos(a)*16, it.o.y - 50 + Math.sin(a*1.3)*4 - (i%2)*4, 1.8, 2.6, "#e9f3fa"); } } }
     else { const p = it.p; drawPet(gx, p.x, p.y, p.lk, {t, ph:p.ph, face:p.f, back:p.back, anim:p.a, wave:p.wave, scale:ks, lw:1.5}); p.top = p.y - (p.a === "sit" ? 74 : 78)*ks - 6; }
+  }
+  if (!world.cafe && drops.length){
+    for (let i=drops.length-1;i>=0;i--){ const q = drops[i], a = (now - q.t0)/1000; if (a < 0) continue; if (a > 2){ drops.splice(i,1); continue; }
+      let y = q.y0 + 640*a*a - 110*a, bounce = 0; if (y >= q.gy){ const b = a - Math.sqrt((q.gy - q.y0 + 110*a)/640); y = q.gy; bounce = Math.abs(Math.sin(Math.min(1,(a-0.55)*5)*Math.PI))*6*(a>0.55?1:0); }
+      const x = q.x0 + q.vx*Math.min(a,0.7); gx.globalAlpha = a > 1.6 ? Math.max(0,(2-a)/0.4) : 1;
+      if (q.e){ gx.font = "20px sans-serif"; gx.textAlign = "center"; gx.textBaseline = "middle"; gx.fillText(q.e, x, y - 10 - bounce); gx.textAlign = "left"; }
+      else { ov(gx, x, y - 6 - bounce, 6.5, 6.5, "#ffd23f", INK, 1.3); ov(gx, x-1.4, y - 7.5 - bounce, 2, 2, "#fff6c9"); }
+      gx.globalAlpha = 1; }
   }
   if (world.cafe){
     gx.globalCompositeOperation = "lighter";
@@ -2030,7 +2201,9 @@ function frameRoom(now, t, dt){
   }
   drawLabels(people, t, 1);
 }
+let lastDraw = 0;
 function frame(now){
+  if (!document.hasFocus() && now - lastDraw < 100){ requestAnimationFrame(frame); return; } lastDraw = now;
   const dt = Math.min(1/30, (now - last)/1000); last = now; const t = now/1000;
   if (wPrevOn) drawWPrev(t);
   if (Date.now() - roomCacheAt > 60000){ roomCacheAt = Date.now(); if (scene && scene.kind === "room") roomCache.clear(); }
