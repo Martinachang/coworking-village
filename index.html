@@ -768,7 +768,7 @@ function hangSign(c,x,y,s,col){ line(c,[x-24,y-16,x-20,y],OL,1); line(c,[x+24,y-
 const NPC = {
   bear:{n:"熊老闆",lk:{sp:2,fur:7,eye:0,nose:1,mouth:1,mark:0,hat:0,cloth:6,cc:1}},
   cat:{n:"喵喵店長",lk:{sp:0,fur:3,eye:1,nose:2,mouth:0,mark:0,hat:1,cloth:3,cc:5}},
-  dog:{n:"汪汪咖啡師",lk:{sp:3,fur:1,eye:4,nose:1,mouth:2,mark:1,hat:0,cloth:6,cc:3}},
+  dog:{n:"汪汪咖啡師",lk:{sp:3,fur:7,eye:4,nose:1,mouth:2,mark:1,hat:0,cloth:6,cc:3}},
   sheep:{n:"咩咩館長",lk:{sp:6,fur:2,eye:2,nose:0,mouth:1,mark:2,hat:5,cloth:5,cc:0}}
 };
 
@@ -1177,7 +1177,7 @@ function genCafe(){
   O("plant",372,556); blk(354,528,390,556); O("plant",508,556); blk(490,528,526,556); O("plant",64,552); blk(46,524,82,556);
   O("lamp2",828,318); blk(816,296,842,318); O("coatrack",826,548); blk(812,520,842,552);
   H([400,556,480,600],"回到村子",{to:[440,540], fn:()=>enterScene("town", doorFront("cowork"))});
-  W.glows = [[175,70,130],[305,70,130],[480,70,130],[625,70,130],[310,345,200],[730,395,170],[650,215,190],[828,260,130],[110,150,90],[370,150,90],[700,520,120]];
+  W.glows = [[175,70,130],[305,70,130],[480,70,130],[625,70,100],[310,345,200],[730,395,170],[650,228,140],[828,260,130],[110,150,90],[370,150,90],[700,520,120]];
   W.spawn = {x:440, y:524};
   return W;
 }
