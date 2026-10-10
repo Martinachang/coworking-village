@@ -356,6 +356,39 @@ input:focus-visible{outline:2px solid var(--animal-focus);outline-offset:1px;bor
   #dock .dk{flex:1;display:flex;justify-content:center}
   #chatBox{bottom:calc(112px + env(safe-area-inset-bottom,0px))}
 }
+
+/* top-right: collapsible focus icon + settings */
+#topR{position:absolute;z-index:3;top:calc(10px + env(safe-area-inset-top,0px));right:12px;display:flex;align-items:center;gap:8px}
+#topR #pomo,#topR #setBtn{position:static}
+#topR #pomo{display:flex;align-items:center;gap:4px;padding:3px;border-radius:999px;min-height:38px;box-sizing:border-box}
+#pPanel{display:none;align-items:center;gap:6px;padding-left:6px}
+#pomo.open #pPanel{display:flex}
+#pico{width:32px;height:32px;border-radius:50%;padding:0;display:grid;place-items:center;flex:none;background:var(--animal-primary);border:2px solid var(--animal-primary);box-shadow:0 2px 0 var(--animal-primary-active);color:#fff9e3}
+#pico svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#pomo.brk #pico{background:#5bb98c;border-color:#5bb98c;box-shadow:0 2px 0 #3f9a6f}
+#pmini{display:none;font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;padding-left:8px;color:var(--animal-text)}
+#pomo.run:not(.open) #pmini{display:block}
+#pomo.run:not(.open){padding-right:3px}
+#setBtn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;padding:0;color:var(--animal-text)}
+#setBtn svg{width:21px;height:21px;fill:currentColor}
+#mSet .sheet{width:min(420px,100%)}
+.setList{display:grid;gap:2px}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 2px;border-top:1.5px dashed rgba(91,88,86,.22);font-weight:700;font-size:15px}
+.srow:first-child{border-top:0}
+.srow small{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-top:2px;max-width:230px;line-height:1.4}
+.seg{display:flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;flex:none}
+.seg button{padding:5px 14px;font-size:14px;font-weight:800;background:var(--paper);color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--animal-primary);color:#fff9e3}
+.sw{width:50px;height:28px;border-radius:999px;border:2px solid var(--ink);background:#d9d4c8;position:relative;flex:none;padding:0}
+.sw i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid var(--ink);box-sizing:border-box;transition:transform .15s}
+.sw[aria-checked="true"]{background:var(--animal-primary)}
+.sw[aria-checked="true"] i{transform:translateX(22px)}
+.stp{display:flex;align-items:center;gap:8px;flex:none}
+.stp button{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);font-size:18px;font-weight:800;line-height:1;padding:0}
+.stp b{min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
+.stp em{font-style:normal;font-size:12px;color:var(--ink-soft)}
+.srow:last-child{justify-content:flex-start;flex-wrap:wrap}
+@media (max-width:640px){ #topR{right:8px;gap:6px} #setBtn{width:36px;height:36px} }
 </style>
 
 <svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs><clipPath id="animal-modal-clip" clipPathUnits="objectBoundingBox"><path d="M0.501,0.005 L0.501,0.005 L0.523,0.005 L0.549,0.006 C0.704,0.01,0.796,0.017,0.825,0.027 L0.827,0.028 C0.872,0.045,0.939,0.044,0.978,0.17 C1,0.254,1,0.365,0.99,0.505 L0.988,0.513 C0.979,0.558,0.971,0.598,0.965,0.633 C0.956,0.689,0.979,0.77,0.964,0.865 C0.953,0.928,0.921,0.966,0.869,0.979 C0.821,0.986,0.773,0.992,0.726,0.995 L0.712,0.996 L0.694,0.997 C0.648,1,0.586,1,0.507,1 L0.501,1 L0.464,1 C0.385,1,0.325,0.998,0.283,0.995 C0.234,0.992,0.184,0.987,0.133,0.979 C0.081,0.966,0.05,0.928,0.039,0.865 C0.023,0.77,0.047,0.689,0.037,0.633 C0.031,0.595,0.023,0.552,0.013,0.505 C-0.006,0.365,-0.002,0.254,0.024,0.17 C0.064,0.045,0.13,0.045,0.174,0.028 L0.175,0.028 C0.204,0.017,0.303,0.009,0.474,0.005 L0.501,0.005"/></clipPath></defs></svg>
@@ -366,10 +399,13 @@ input:focus-visible{outline:2px solid var(--animal-focus);outline-offset:1px;bor
 
   <div class="hud paper" id="coins" title="金幣：專注工作就會慢慢增加"><span class="coin">$</span><b id="coinN">0</b><small id="rate"></small></div>
   <div class="hud paper" id="scenePill"><b id="sceneT">毛球村</b><div class="lv"><span id="lvT">專注 Lv.1</span><i><em id="lvBar"></em></i></div></div>
-  <div class="hud paper" id="pomo" aria-label="番茄鐘">
-    <button class="rb" id="pgo" type="button" aria-label="開始番茄鐘">▶</button>
-    <span id="ptime">25:00</span><small id="pmode">專注</small>
-    <button class="rb alt" id="preset" type="button" aria-label="重設番茄鐘">↺</button>
+  <div id="topR">
+    <div class="hud paper" id="pomo" aria-label="番茄鐘">
+      <div id="pPanel"><button class="rb" id="pgo" type="button" aria-label="開始番茄鐘">▶</button><span id="ptime">25:00</span><small id="pmode">專注</small><button class="rb alt" id="preset" type="button" aria-label="重設番茄鐘">↺</button></div>
+      <span id="pmini">25:00</span>
+      <button id="pico" type="button" aria-label="專注計時" title="專注計時" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.500v4.200l2.600 1.600M9.500 3h5"/></svg></button>
+    </div>
+    <button class="hud paper" id="setBtn" type="button" aria-label="設定" title="設定"><svg viewBox="0 0 24 24"><path d="M19.140 12.940c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.030-1.580a.49.49 0 0 0 .12-.61l-1.920-3.320a.49.49 0 0 0-.59-.22l-2.390.96c-.5-.38-1.030-.7-1.620-.94l-.36-2.540a.484.484 0 0 0-.48-.41h-3.840c-.24 0-.43.17-.47.41l-.36 2.540c-.59.24-1.130.57-1.620.94l-2.390-.96c-.22-.08-.47 0-.59.22L2.740 8.870c-.12.21-.08.47.12.61l2.030 1.580c-.05.3-.09.63-.09.94s.02.64.07.94l-2.030 1.580a.49.49 0 0 0-.12.61l1.920 3.320c.12.22.37.29.59.22l2.390-.96c.5.38 1.030.7 1.620.94l.36 2.540c.05.24.24.41.48.41h3.840c.24 0 .44-.17.47-.41l.36-2.540c.59-.24 1.130-.56 1.620-.94l2.390.96c.22.08.47 0 .59-.22l1.920-3.320c.12-.22.07-.47-.12-.61l-2.010-1.580zM12 15.600c-1.980 0-3.600-1.620-3.600-3.600s1.620-3.600 3.600-3.600 3.600 1.620 3.600 3.600-1.620 3.600-3.600 3.600z"/></svg></button>
   </div>
   <div class="hud" id="bars">
     <div class="vbar" title="今日專注（目標 2 小時）" aria-label="今日專注（目標 2 小時）"><i><em id="bFocus" style="background:linear-gradient(0deg,#11a89b,#4fdccf)"></em></i><span class="bi" style="background:#19c8b9"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10h-2.5A7.5 7.5 0 1 1 12 4.5zm0 5a5 5 0 1 0 5 5h-2.5A2.5 2.5 0 1 1 12 9.500zm9.200-4.500-5.300.9v1.600l-3.700 3.700 1.800 1.800 3.700-3.700h1.600z"/></svg></span></div>
@@ -402,6 +438,21 @@ input:focus-visible{outline:2px solid var(--animal-focus);outline-offset:1px;bor
     <div class="trays"><div class="tray" id="trayItems"></div><span class="sep" aria-hidden="true"></span><div class="tray" id="trayWall"></div></div>
   </div>
   <div id="toast" class="paper" role="status"></div>
+
+  <div class="modal" id="mSet" hidden>
+    <div class="sheet paper" role="dialog" aria-labelledby="setT">
+      <header><h2 id="setT">設定</h2><button class="x" type="button" data-close aria-label="關閉">×</button></header>
+      <div class="setList">
+        <div class="srow"><span>語言</span><div class="seg" id="setLang" data-nt="1"><button type="button" data-v="zh">中文</button><button type="button" data-v="en">English</button></div></div>
+        <div class="srow"><span>咖啡廳音效</span><button class="sw" id="setSnd" type="button" role="switch"><i></i></button></div>
+        <div class="srow"><span>顯示名稱標籤</span><button class="sw" id="setNames" type="button" role="switch"><i></i></button></div>
+        <div class="srow"><span>省電模式<small>降低畫面更新率，適合長時間掛在背景</small></span><button class="sw" id="setLow" type="button" role="switch"><i></i></button></div>
+        <div class="srow"><span>專注時間</span><div class="stp"><button type="button" id="setWm">−</button><b id="setWv">25</b><button type="button" id="setWp">+</button><em>分鐘</em></div></div>
+        <div class="srow"><span>休息時間</span><div class="stp"><button type="button" id="setBm">−</button><b id="setBv">5</b><button type="button" id="setBp">+</button><em>分鐘</em></div></div>
+        <div class="srow"><button class="btn green" id="setWard" type="button">編輯外觀</button><button class="btn" id="setPReset" type="button">重設番茄鐘</button></div>
+      </div>
+    </div>
+  </div>
 
   <div class="modal" id="mWard" hidden>
     <div class="sheet wide paper" role="dialog" aria-labelledby="wT">
@@ -492,6 +543,38 @@ function vnoise(x,y,sd){ const xi=Math.floor(x), yi=Math.floor(y), xf=x-xi, yf=y
 const mixC = new Map();
 function mix(a,b,t){ const k=a+b+t; if (mixC.has(k)) return mixC.get(k); const pa=parseInt(a.slice(1),16), pb=parseInt(b.slice(1),16); const f=s=>Math.round(((pa>>s)&255)*(1-t)+((pb>>s)&255)*t); const o="#"+((1<<24)|(f(16)<<16)|(f(8)<<8)|f(0)).toString(16).slice(1); mixC.set(k,o); return o; }
 const store = { get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+
+/* ===== language & settings ===== */
+const SET = Object.assign({lang:"", names:1, low:0, work:25, brk:5}, store.get("mq.set") || {});
+SET.work = Math.min(90, Math.max(5, Math.round(+SET.work || 25))); SET.brk = Math.min(30, Math.max(1, Math.round(+SET.brk || 5)));
+if (SET.lang !== "zh" && SET.lang !== "en") SET.lang = /^zh/i.test(navigator.language || "") ? "zh" : "en";
+const LANG = SET.lang; document.documentElement.lang = LANG === "en" ? "en" : "zh-Hant";
+let RAW = false;
+const CJK = /[\u3000-\u30ff\u3400-\u9fff\uff00-\uffef]/;
+let tr = s => s;
+if (LANG === "en"){
+  const MAP = new Map([["多人連線還沒接上。在 claude.ai 開啟這個頁面，並把它分享給同事。","Multiplayer isn't connected. Open this page on claude.ai and share it with colleagues."],["點地面走路，點建築物進門，WASD 或方向鍵也能走。按 Enter 聊天。","Click the ground to walk and buildings to enter — WASD or arrow keys work too. Press Enter to chat."],["熊老闆：「歡迎光臨！買好的傢俱會放進背包，回家按『佈置』就能擺出來喔。」","Boss Bear: “Welcome! Furniture you buy goes into your bag — tap ‘Decorate’ at home to set it out.”"],["臉部零件可以免費換。頭飾和衣服要到服飾店用金幣購買，買過的就能隨時穿。","Face parts are free to change. Hats and outfits are bought with coins at the clothing store — once bought, wear them anytime."],["喵喵店長：「臉部可以免費換！頭飾和衣服點一下試穿，喜歡再用金幣買。」","Manager Meow: “Face parts are free to change! Tap a hat or outfit to try it on, then buy it with coins if you like it.”"],["村子裡還沒有其他住戶。分享這個頁面給同事，他們進村後就會搬進空地。","No other residents yet. Share this page with colleagues — they'll move into an empty lot when they join."],["你畫我猜需要多人連線：在 claude.ai 開啟並分享這個頁面。","Draw & Guess needs multiplayer: open and share this page on claude.ai."],["猜中的人得 30 金幣，畫的人得 20 金幣。每局 80 秒。","The guesser earns 30 coins and the drawer earns 20. 80 seconds per round."],["拜訪別人的家需要登入 claude.ai 開啟這個頁面。","Visiting other homes requires opening this page while signed in to claude.ai."],["臉部零件都可以免費換。頭飾和衣服要在服飾店用金幣購買。","Face parts are free to change. Hats and outfits are bought with coins at the clothing store."],["現在只有你在線上。用右上角的分享按鈕邀請同事進村吧！","You're the only one online. Use the Share button at the top right to invite colleagues!"],["能量快用完了，去咖啡廳的吧台喝一杯，或坐下休息一下","Energy is running low — grab a drink at the café bar or take a rest"],["點下面的地點可以直接過去，也可以在村子裡慢慢走。","Tap a place below to go there directly, or stroll around the village."],["咩咩館長：「點中間的畫板就能開一局你畫我猜！」","Curator Baa: “Tap the board in the middle to start a round of Draw & Guess!”"],["　經典咖啡和其他飲品免費，每次點隔 45 秒。"," Classic coffees and other drinks are free — one order every 45 seconds."],["點下面的物品放進房間，拖曳房間裡的物品移動位置","Tap an item below to place it; drag items in the room to move them"],[" 種，每滿 10 種 +100 金幣（已領 "," items — every 10 earns +100 coins (claimed "],["汪汪咖啡師：「剛喝完一杯呢，休息一下再來！」","Barista Woof: “You just finished a cup — take a breather first!”"],["！走進咖啡廳坐下專注，就能賺金幣買傢俱。","! Walk into the café and sit down to focus — you'll earn coins to buy furniture."],["汪汪咖啡師：「想喝什麼呢？現點現做喔！」","Barista Woof: “What would you like? Made fresh to order!”"],["喵喵店長：「歡迎光臨～今天想喝點什麼？」","Manager Meow: “Welcome~ What would you like to drink today?”"],["目前只有檢視權限，進度只會存在這台裝置","View-only access: progress is saved on this device only"],["完成一顆番茄！+50 金幣，起來伸展 ","Pomodoro complete! +50 coins — stretch for "],["敲敲門…主人的家正在載入，或還沒建立","Knock knock… the home is still loading, or hasn't been built yet"],["這塊空地還沒有人住，等新鄰居搬進來","This lot is empty — waiting for a new neighbor"],[" 放進背包了，回家按『佈置』擺出來"," added to your bag — tap ‘Decorate’ at home to place it"],["住戶名單暫時讀不到，等一下再試試。","Can't load the resident list right now — try again later."],["村子小物集滿了！獎勵 500 金幣","Village set complete! Reward: 500 coins"],["能量：專注會消耗，休息和咖啡會補充","Energy: drained by focus, restored by rest and coffee"],["心情：聊天、打招呼、拜訪朋友會變好","Mood: improves with chatting, waving, and visiting friends"],["降低畫面更新率，適合長時間掛在背景","Lowers the frame rate — good for leaving it running all day"],["背包是空的。去傢俱店買點東西吧！","Your bag is empty. Go buy something at the furniture store!"],[" 開了一局你畫我猜！點畫板一起猜"," started a Draw & Guess round! Tap the board to join in"],["金幣不夠，專注工作可以賺金幣喔","Not enough coins — focus to earn more!"],["這棵樹還在長新的果實，晚點再來","This tree is growing new fruit — come back later"],["點唱機（咖啡廳音效 開／關）","Jukebox (Café sound on / off)"],["噴水池和長椅，大家碰面的地方","A fountain and benches — where everyone meets"],["汪汪咖啡師：「熱拿鐵來囉！」","Barista Woof: “Hot latte coming up!” "],[" 猜中了！你得到 20 金幣"," guessed it! You earned 20 coins"],["免費續杯！坐久一點也沒關係","Free refills! Stay as long as you like"],["佈置房間、在自己的書桌專注","Decorate your room and focus at your own desk"],["地圖沒有存成功，等一下再試","Couldn't save the map — try again later"],["每日簽到 +100 金幣！","Daily check-in +100 coins!"],["金幣：專注工作就會慢慢增加","Coins: they grow slowly as you focus"],["今日專注（目標 2 小時）","Focus today (goal: 2 hours)"],["拿鐵 ・ 抹茶 ・ 可可","Latte · Matcha · Cocoa"],["　在村子裡搖樹有機會找到"," · Shake trees in the village to find them"],["買好了！新衣服很適合你","Purchased! The new outfit suits you"],["上一份還在做喔，請稍等","Still making the last order — please wait"],["喵喵店長：「慢慢喝～ ","Manager Meow: “Take your time~ "],["　集滿 +500 金幣"," · Complete the set: +500 coins"],["你猜中了！+30 金幣","You got it! +30 coins"],["傢俱店 ・ 歡迎光臨","Furniture Store · Welcome"],["服飾店 ・ 試穿免費","Clothing Store · Free Try-ons"],["新的村子地圖生成了！","A new village map was generated!"],[" 要到服飾店購買（共"," must be bought at the clothing store (total"],["歡迎來到毛球共工村，","Welcome to Fluffy Co-work Village, "],[" 秒後再點下一杯喔」","s before your next order”"],["咖啡品味升到 Lv.","Café Skill reached Lv."],["還沒開始。誰要先畫？","Not started yet. Who wants to draw first?"],["重設番茄鐘並回到專注","Reset the timer"],["西印度櫻桃香檸冷萃","Acerola Lemon Cold Brew"],["巧克力可可碎片冰沙","Chocolate Chip Frappe"],["阿里山蜜柚烏龍青茶","Alishan Pomelo Oolong"],["草莓巴西莓檸檬氣泡","Strawberry Açaí Lemon Fizz"],["草莓巴西莓椰奶氣泡","Strawberry Açaí Coconut Fizz"],["芒果火龍果檸檬氣泡","Mango Dragonfruit Lemon Fizz"],["芒果火龍果椰奶氣泡","Mango Dragonfruit Coconut Fizz"],["村子的存檔空間滿了","The village save space is full"],["在咖啡香裡一起專注","Focus together in the coffee aroma"],["換裝、買頭飾和衣服","Change outfits, buy hats and clothes"],["・地圖是隨機生成的"," · The map is randomly generated"],["再靠近一點才搖得到","Get a little closer to shake it"],["換你畫！讓大家猜：","Your turn to draw! Let everyone guess: "],[" 猜中了！答案是「"," got it! The answer was “"],["毛球共工村遊戲畫面","Fluffy Co-work Village game view"],["我來畫，開新的一局","I'll draw — start a new round"],["焦糖可可碎片冰沙","Caramel Chip Frappe"],["摩卡可可碎片冰沙","Mocha Chip Frappe"],["烤雞生吐司三明治","Roast Chicken Toast Sandwich"],["黑松露嫩蛋三明治","Truffle Egg Sandwich"],["舒肥雞鮮蔬帕里尼","Sous-vide Chicken Panini"],["牛肉肉醬義大利麵","Beef Bolognese Pasta"],["跟喵喵店長買衣服","Buy Clothes from Manager Meow"],["跟汪汪咖啡師點餐","Order from Barista Woof"],["這個位子有人坐了","Someone is already sitting here"],["和大家玩你畫我猜","Play Draw & Guess with everyone"],["捏一隻你的小動物","Create your little animal"],["回家佈置時可以換","Swap it in when decorating at home"],["咖啡品味 Lv.","Café Skill Lv."],[" 杯付費餐點升級"," more paid items to level up"],["一份～請稍等！」",", coming right up — one moment!”"],[" 好了！能量 +"," is ready! Energy +"],[" 分鐘內金幣 ×"," min: coins ×"],["餐點圖鑑收集了 ","Menu codex: collected "],[" 次，明天再來吧"," times today — come back tomorrow"],[" 金幣！（今天 "," coins! (today "],["今天也一起努力！","Let's work hard together today!"],["差一點點就完成了","Almost done"],["要不要一起休息？","Want to take a break together?"],["時間到！答案是「","Time's up! The answer was “"],["跟附近的人聊天…","Chat with people nearby…"],["重新生成村莊地圖","Regenerate Village Map"],["鹹焦糖氮氣歐蕾","Salted Caramel Nitro au Lait"],["西印度櫻桃紅茶","Acerola Black Tea"],["厚蛋起司三明治","Thick Egg & Cheese Sandwich"],["火腿起司軟法堡","Ham & Cheese Baguette"],["黑糖珍珠鮮奶茶","Brown Sugar Boba Milk Tea"],["跟熊老闆買傢俱","Buy Furniture from Boss Bear"],["跟咩咩館長聊天","Chat with Curator Baa"],["跟喵喵店長點餐","Order from Manager Meow"],["關閉咖啡廳音效","Turn off café sound"],["開啟咖啡廳音效","Turn on café sound"],["咖啡廳音效：開","Café sound: on"],["咖啡廳音效：關","Café sound: off"],["你已經在家裡了","You're already home"],["休息結束，第 ","Break over — pomodoro #"],["　金幣加成 +"," · Coin bonus +"],["！金幣加成 +","! Coin bonus +"],["今天已經搖了 ","You've already shaken trees "],["再十分鐘就休息","Break in ten minutes"],["猜猜看是什麼？","What is it?"],["幫小動物取名字","Name your little animal"],["每日精選咖啡","Daily Brew"],["香草甜奶冷萃","Vanilla Sweet Cream Cold Brew"],["香檸蜜柚冷萃","Lemon Pomelo Cold Brew"],["夏日冰柚冷萃","Summer Pomelo Cold Brew"],["氮氣冷萃咖啡","Nitro Cold Brew"],["氮氣冷萃歐蕾","Nitro Cold Brew au Lait"],["特調氮氣冷萃","Special Nitro Cold Brew"],["醇濃抹茶冰沙","Rich Matcha Frappe"],["抹茶奶霜冰沙","Matcha Cream Frappe"],["焦糖咖啡冰沙","Caramel Coffee Frappe"],["濃縮奶霜冰沙","Espresso Cream Frappe"],["雙果果汁冰沙","Double Fruit Smoothie"],["醇濃抹茶那堤","Rich Matcha Latte"],["冰搖檸檬紅茶","Iced Shaken Lemon Black Tea"],["冰搖檸檬果茶","Iced Shaken Lemon Fruit Tea"],["阿里山烏龍茶","Alishan Oolong"],["洋甘菊花草茶","Chamomile Herbal Tea"],["起司牛肉可頌","Beef & Cheese Croissant"],["經典起司蛋糕","Classic Cheesecake"],["桂花蜂蜜拿鐵","Osmanthus Honey Latte"],["柚香氣泡咖啡","Pomelo Sparkling Coffee"],["空地・出租中","Vacant Lot · For Rent"],["坐下專注工作","Sit & Focus on Work"],["位子都坐滿了","All seats are taken"],["專注 Lv.","Focus Lv."],["用金幣買傢俱","Buy furniture with coins"],["村子編號 #","Village #"],["購買並穿上（","Buy & Wear ("],["・今天專注 "," · Focused today: "],["在村子裡散步","Strolling around the village"],[" 顆番茄開始"," begins"],["，馬上來！」",", coming right up!”"],[" 種！獎勵 "," items! Reward: "],["　餐點總共 "," · Total "],["這杯拿鐵不錯","This latte is good"],["好香的咖啡味","Smells like great coffee"],["今天進度不錯","Good progress today"],["唔…再改一下","Hmm… one more tweak"],["村子裡的住戶","Village Residents"],["顯示名稱標籤","Show name tags"],["汪汪咖啡師","Barista Woof"],["焦糖瑪奇朵","Caramel Macchiato"],["可可瑪奇朵","Cocoa Macchiato"],["咖啡密斯朵","Caffè Misto"],["福吉茶那堤","Hojicha Latte"],["經典巧克力","Classic Hot Chocolate"],["兒童熱可可","Kids' Hot Cocoa"],["毛球共工村","Fluffy Co-work Village"],["玩你畫我猜","Play Draw & Guess"],["出門到村子","Head out to the Village"],["坐沙發休息","Rest on the Sofa"],["咖啡廳音效","Café sound"],["坐在長椅上","Sit on the Bench"],["就是這樣！","That's it!"],[" 買好了！"," purchased!"],["揮手打招呼","Wave hello"],["在某人的家","At someone's home"],["暫停番茄鐘","Pause timer"],["開始番茄鐘","Start timer"],["重設番茄鐘","Reset timer"],["今日特調・","Today's Special · "],["圖鑑新增：","Codex added: "],["（已領取）"," (claimed)"],["在趕簡報…","Rushing a presentation…"],["(敲鍵盤)","(typing)"],[" 正在畫…"," is drawing…"],["佈置我的家","Decorate My Home"],["咖啡廳菜單","Café Menu"],["現在在線上","Online Now"],["沒有鼻子","No Nose"],["大圓腮紅","Big Blush"],["淡淡腮紅","Soft Blush"],["條紋 T","Striped Tee"],["領結背心","Bowtie Vest"],["點點睡衣","Polka Pajamas"],["愛心壁紙","Heart Wallpaper"],["抹茶條紋","Matcha Stripes"],["霧藍圓點","Blue Dots"],["芥末星星","Mustard Stars"],["櫻花格子","Sakura Check"],["抹茶磁磚","Matcha Tiles"],["奶茶木板","Milk Tea Planks"],["喵喵店長","Manager Meow"],["咩咩館長","Curator Baa"],["經典咖啡","Classic Coffee"],["美式咖啡","Americano"],["馥郁那堤","Rich Latte"],["卡布奇諾","Cappuccino"],["濃縮咖啡","Espresso"],["冷萃咖啡","Cold Brew Coffee"],["咖啡冰沙","Coffee Frappe"],["紅茶那堤","Black Tea Latte"],["蜜柚紅茶","Pomelo Black Tea"],["冰搖紅茶","Iced Shaken Black Tea"],["冰搖果茶","Iced Shaken Fruit Tea"],["英式紅茶","English Breakfast"],["水果氣泡","Fruit Fizz"],["其他飲品","Other Drinks"],["原味牛奶","Milk"],["玫瑰拿鐵","Rose Latte"],["星星碎片","Star Shard"],["回到村子","Back to Village"],["看看傢俱","Browse Furniture"],["逛逛衣服","Browse Clothes"],["你畫我猜","Draw & Guess"],["點我開始","Tap to Start"],["坐下專注","Sit & Focus"],["躺下休息","Lie Down & Rest"],["朋友的家","Friend's Home"],["坐下開會","Sit for a Meeting"],["坐下聊天","Sit & Chat"],["今日推薦","Today's Pick"],["搖搖看樹","Shake the Tree"],["村子地圖","Village Map"],["展開聊天","Show chat"],["收合聊天","Hide chat"],["中央廣場","Central Plaza"],["衣服顏色","Outfit Color"],["牆面裝飾","Wall Decor"],["已擁有 ","Owned "],["去他家玩","Visit their home"],["在咖啡廳","In the café"],["在傢俱店","At the furniture store"],["在服飾店","At the clothing store"],["在遊戲館","In the game hall"],["在自己家","At home"],["載入中…","Loading…"],[" 件傢俱"," furniture pieces"],[" 分鐘吧"," minutes"],["今日特調","Today's Special"],["　心情+"," · Mood +"],["　金幣×"," · Coins ×"],["村子小物","Village Items"],["已收集 ","Collected "],["還沒點過","Not ordered yet"],["這一頁 ","This tab: "],[" 進村了"," joined the village"],[" 下線了"," went offline"],["珍珠奶茶","Boba tea"],["全部擦掉","Clear All"],[" 個字　"," letters  "],["猜中了！","Correct!"],["聊天輸入","Chat input"],["收回背包","Put Away"],["省電模式","Low-power mode"],["專注時間","Focus length"],["休息時間","Break length"],["編輯外觀","Edit appearance"],["專注計時","Focus timer"],["開始專注","Start focusing"],["垂耳狗","Floppy Dog"],["牛奶白","Milk White"],["雲朵灰","Cloud Gray"],["豆豆眼","Bean Eyes"],["圓圓眼","Round Eyes"],["瞇瞇眼","Squinty Eyes"],["懶懶眼","Sleepy Eyes"],["亮晶晶","Sparkly"],["一字眼","Line Eyes"],["小鼻點","Tiny Dot"],["粉三角","Pink Triangle"],["小愛心","Little Heart"],["ω 嘴","ω Mouth"],["哈哈笑","Big Grin"],["吐舌頭","Tongue Out"],["嘟嘟嘴","Pouty"],["小雀斑","Freckles"],["蝴蝶結","Bow"],["小皇冠","Tiny Crown"],["紳士帽","Top Hat"],["草莓夾","Strawberry Clip"],["吊帶褲","Overalls"],["蓬蓬裙","Tutu Skirt"],["帽 T","Hoodie"],["小圍裙","Little Apron"],["湖水藍","Lake Blue"],["芥末黃","Mustard"],["森林綠","Forest Green"],["櫻花粉","Sakura Pink"],["單人椅","Armchair"],["工作桌","Work Desk"],["五斗櫃","Dresser"],["海灘球","Beach Ball"],["電視櫃","TV Stand"],["圓地毯","Round Rug"],["風景畫","Landscape Painting"],["小層架","Small Shelf"],["米白牆","Cream Wall"],["木地板","Wood Floor"],["熊老闆","Boss Bear"],["馥列白","Flat White"],["伯爵茶","Earl Grey"],["燕麥奶","Oat Milk"],["杏仁奶","Almond Milk"],["肉桂捲","Cinnamon Roll"],["檸檬塔","Lemon Tart"],["四葉草","Four-leaf Clover"],["蜂蜜罐","Honey Jar"],["小鈴鐺","Little Bell"],["超稀有","Super Rare"],["金蘑菇","Golden Mushroom"],["專注中","Focusing"],["休息中","On break"],["可聊天","Open to chat"],["開會中","In a meeting"],["咖啡廳","Café"],["傢俱店","Furniture Store"],["服飾店","Clothing Store"],["遊戲館","Game Hall"],["毛球村","Fluffy Village"],[" 的家","'s Home"],["我的家","My Home"],["坐吧台","Sit at the Bar"],["拜訪 ","Visit "],["你有 ","You have "],[" 金幣"," coins"],["可以坐","Seatable"],["已擁有","Owned"],[" 分鐘"," min"],["去找他","Go find them"],["番茄鐘","Pomodoro timer"],["已滿級","Max level"],["再點 ","Order "],[" 解鎖"," unlocks"],["能量+","Energy +"],["未解鎖","Locked"],["特調・","Special · "],["點過 ","Ordered "],["搖到 ","Got "],["找到「","Found “"],["加油～","Keep going~"],["專心中","Focused"],["新朋友","New Friend"],["冰淇淋","Ice cream"],["橡皮擦","Eraser"],["提示：","Hint: "],["・常客"," · Regular"],["專注 ","Focus "],["休息 ","Break "],["看看 ","View "],["貓咪","Cat"],["兔兔","Bunny"],["小熊","Bear"],["狐狸","Fox"],["小鼠","Mouse"],["綿羊","Sheep"],["奶茶","Milk Tea"],["杏桃","Apricot"],["櫻花","Sakura"],["霧藍","Misty Blue"],["抹茶","Matcha"],["奶油","Cream"],["可可","Cocoa"],["微笑","Smile"],["喔！","Oh!"],["素顏","Bare"],["小花","Little Flower"],["耳機","Headphones"],["嫩芽","Sprout"],["不穿","None"],["磚橘","Brick Orange"],["米白","Off-white"],["沙發","Sofa"],["小床","Little Bed"],["盆栽","Potted Plant"],["書櫃","Bookshelf"],["立燈","Floor Lamp"],["魚缸","Fish Tank"],["窗戶","Window"],["時鐘","Clock"],["鏡子","Mirror"],["彩旗","Bunting"],["那堤","Latte"],["拿鐵","Latte"],["摩卡","Mocha"],["冷萃","Cold Brew"],["冰沙","Frappe"],["茶飲","Tea"],["輕食","Bites"],["橡實","Acorn"],["常見","Common"],["貝殼","Seashell"],["少見","Uncommon"],["楓葉","Maple Leaf"],["稀有","Rare"],["傳說","Legendary"],["暫離","Away"],["鄰居","Neighbor"],["村子","Village"],["坐下","Sit Down"],["出門","Go Outside"],["進入","Enter"],["揮手","Wave"],["愛心","Heart"],["咖啡","Coffee"],["哼歌","Hum"],["動物","Animal"],["毛色","Fur"],["眼睛","Eyes"],["鼻子","Nose"],["嘴巴","Mouth"],["臉頰","Cheeks"],["頭飾","Hat"],["衣服","Outfit"],["衣櫥","Wardrobe"],["金幣","coins"],["傢俱","Furniture"],["壁紙","Wallpaper"],["地板","Flooring"],["買 ","Buy "],[" 個",""],["裝飾","Decor"],["住戶","Resident"],["拜訪","Visit"],["專注","Focus"],["休息","Break"],["/分","/min"],["分）"," min)"],["免費","Free"],["點 ","Order "],["飲料","Drinks"],[" 次"," times"],["小橘","Tangy"],["阿福","A-Fu"],["雪球","Snowball"],["有人","Someone"],["筆電","Laptop"],["番茄","Tomato"],["彩虹","Rainbow"],["雨傘","Umbrella"],["蛋糕","Cake"],["香蕉","Banana"],["鉛筆","Pencil"],["火箭","Rocket"],["房子","House"],["太陽","Sun"],["西瓜","Watermelon"],["眼鏡","Glasses"],["書本","Book"],["氣球","Balloon"],["小魚","Fish"],["星星","Star"],["兔子","Rabbit"],["月亮","Moon"],["雲朵","Cloud"],["花朵","Flower"],["椅子","Chair"],["鑰匙","Key"],["汽車","Car"],["大樹","Tree"],["手機","Phone"],["便當","Lunch box"],["鳳梨","Pineapple"],["企鵝","Penguin"],["雪人","Snowman"],["顏色","Color"],["某人","Someone"],["選單","Menu"],["聊天","Chat"],["送出","Send"],["狀態","Status"],["回家","Home"],["地圖","Map"],["佈置","Decorate"],["完成","Done"],["圖鑑","Codex"],["好友","Friends"],["猜！","Guess!"],["表情","Emotes"],["關閉","Close"],["暱稱","Nickname"],["設定","Settings"],["語言","Language"],["分鐘","min"],["無","None"],["我","Me"],["讚","Like"],["，",", "],["！","!"],["？","?"],["：",": "],["、",", "],["（"," ("],["）",")"],["「","“"],["」","”"],["『","‘"],["』","’"],["・"," · "],["　"," "],["～","~"],["／"," / "],["。",". "],["；","; "],["＿","_ 已重設番茄鐘|Timer reset"]]);
+  const RX = new RegExp([...MAP.keys()].map(k => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"), "g");
+  const cache = new Map();
+  tr = s => {
+    if (typeof s !== "string" || !CJK.test(s)) return s;
+    let r = cache.get(s); if (r !== undefined) return r;
+    r = s.replace(RX, m => MAP.get(m)).replace(/ {2,}/g, " ");
+    if (!/^\s/.test(s)) r = r.replace(/^\s+/, ""); if (!/\s$/.test(s)) r = r.replace(/\s+$/, "");
+    if (cache.size > 4000) cache.clear(); cache.set(s, r); return r;
+  };
+  const P2D = CanvasRenderingContext2D.prototype, _ft = P2D.fillText, _mt = P2D.measureText;
+  P2D.fillText = function(t, x, y, w){ return _ft.call(this, RAW ? t : tr(t), x, y, w); };
+  P2D.measureText = function(t){ return _mt.call(this, RAW ? t : tr(t)); };
+  const ATTRS = ["aria-label", "title", "placeholder", "alt"];
+  const trAttrs = e => { for (const a of ATTRS){ const v = e.getAttribute && e.getAttribute(a); if (v && CJK.test(v)){ const t = tr(v); if (t !== v) e.setAttribute(a, t); } } };
+  const trText = n => { const v = n.nodeValue; if (!v || !CJK.test(v)) return; const p = n.parentNode; if (p && p.closest && p.closest("[data-nt]")) return; const t = tr(v); if (t !== v) n.nodeValue = t; };
+  const trTree = n => { if (n.nodeType === 3){ trText(n); return; } if (n.nodeType !== 1 || n.tagName === "SCRIPT" || n.tagName === "STYLE") return; if (n.closest && n.closest("[data-nt]")) return; trAttrs(n); for (let c = n.firstChild; c; c = c.nextSibling) trTree(c); };
+  trTree(document.body);
+  new MutationObserver(recs => { for (const r of recs){ if (r.type === "childList") r.addedNodes.forEach(trTree); else if (r.type === "characterData") trText(r.target); else trAttrs(r.target); } })
+    .observe(document.body, {subtree:true, childList:true, characterData:true, attributes:true, attributeFilter:ATTRS});
+}
+
 const cleanStr = (s,n) => typeof s === "string" ? s.replace(/[\u0000-\u001f\u007f​-‏‪-‮⁠-⁯﻿]/g,"").trim().slice(0,n) : "";
 const FONT = '"Huninn","M PLUS Rounded 1c","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
 
@@ -982,7 +1065,7 @@ function drawRock(c,v){ ov(c,0,0,13,4,"rgba(91,88,86,.14)"); ov(c,0,-7,12+v*2,8,
 function drawLamp(c){ ov(c,0,0,8,3,"rgba(91,88,86,.16)"); rr(c,-2.2,-56,4.4,56,2,"#9a835a",INK,1); rr(c,-8,-70,16,15,[7,7,3,3],C.yellowL,INK,1.2); rr(c,-10,-72,20,4,2,"#9a835a",INK,1); }
 function drawBench(c){ ov(c,0,4,26,5,"rgba(91,88,86,.14)"); rr(c,-28,-22,56,7,3,C.wood,INK,1.2); rr(c,-28,-11,56,8,3,C.woodL,INK,1.2); rr(c,-24,-3,4,8,1.5,"#9a835a"); rr(c,20,-3,4,8,1.5,"#9a835a"); }
 function drawFountain(c){ ov(c,0,4,48,13,"rgba(91,88,86,.14)"); ov(c,0,-6,46,20,"#f3eedd",INK,1.6); ov(c,0,-9,38,15,"#a8e0da"); ov(c,-12,-12,8,3,"#a6cbc5"); rr(c,-6,-40,12,30,5,"#f3eedd",INK,1.3); ov(c,0,-40,15,6,"#f3eedd",INK,1.3); ov(c,0,-42,10,3.6,"#a8e0da"); }
-function drawSignpost(c){ rr(c,-3,-46,6,46,2,C.wood,INK,1.1); rr(c,-40,-62,80,22,8,C.woodL,INK,1.3); txt(c,"毛球共工村",0,-50.5,11.5,INK,800); }
+function drawSignpost(c, bw){ bw = bw || 80; rr(c,-3,-46,6,46,2,C.wood,INK,1.1); rr(c,-bw/2,-62,bw,22,8,C.woodL,INK,1.3); txt(c,"毛球共工村",0,-50.5,11.5,INK,800); }
 function drawMailbox(c,col){ rr(c,-2,-22,4,22,1.5,C.woodD,INK,0.9); rr(c,-9,-34,18,13,[6,6,2,2],col,INK,1.1); rr(c,7,-38,2,8,1,INK); poly(c,[9,-38,15,-36,9,-33],C.orange); }
 function drawBuilding(c,b,name){
   const W = b.w*TT, D = b.d*TT, def = b.key === "house" ? null : BDEF[b.key];
@@ -1017,7 +1100,7 @@ function objSprite(o){
     case "lamp": return sprite("lamp",30,84,15,78,c=>drawLamp(c));
     case "bench": return sprite("bench",70,40,35,30,c=>drawBench(c));
     case "fountain": return sprite("fountain",110,80,55,64,c=>drawFountain(c));
-    case "sign": return sprite("sign",90,70,45,66,c=>drawSignpost(c));
+    case "sign": { const sw = LANG === "en" ? 170 : 90; return sprite("sign"+sw,sw,70,sw/2,66,c=>drawSignpost(c, sw-10)); }
     case "mailbox": return sprite("mbox"+o.b.plot,26,44,13,40,c=>drawMailbox(c,o.b.roof));
     case "bld": { const b = o.b, W = b.w*TT, D = b.d*TT; const name = b.key === "house" ? plotName(b) : ""; return sprite("b"+b.key+(b.plot??"")+"|"+name, W+60, 110+D*0.9+60, (W+60)/2, 110+D*0.9+40, c=>drawBuilding(c,b,name)); }
   }
@@ -1547,7 +1630,7 @@ setChatMin(false, false);
 function addLine(build){ const d = document.createElement("div"); d.className = "m"; d._t = performance.now(); build(d); if (chatBoxEl.classList.contains("min")) $("chatDot").hidden = false; logEl.appendChild(d); while (logEl.children.length > 40) logEl.firstChild.remove(); logEl.scrollTop = logEl.scrollHeight; }
 setInterval(() => { const now = performance.now(), typing = document.activeElement === $("chat") || $("chat").value.length > 0;
   for (const d of [...logEl.children]){ if (typing){ d._t = now; d.classList.remove("out"); continue; } if (now - d._t > 5000 && !d.classList.contains("out")){ d.classList.add("out"); setTimeout(() => d.remove(), 900); } } }, 400);
-function addChat(name, text, color){ addLine(d => { const b = document.createElement("b"); b.style.color = color; b.textContent = name + "："; d.append(b, document.createTextNode(text)); }); }
+function addChat(name, text, color){ addLine(d => { d.dataset.nt = "1"; const b = document.createElement("b"); b.style.color = color; b.textContent = name + "："; d.append(b, document.createTextNode(text)); }); }
 function sysMsg(t){ addLine(d => { d.classList.add("sys"); d.textContent = t; }); }
 $("chatF").addEventListener("submit", e => {
   e.preventDefault();
@@ -1686,12 +1769,12 @@ $("wDone").addEventListener("click", () => {
   const {cost} = wardCost();
   if (cost){ if (!wShop || my.coins < cost) return; if (!owned("hat",wDraft.hat)) my.ownHat.push(wDraft.hat); if (!owned("cloth",wDraft.cloth)) my.ownCloth.push(wDraft.cloth); addCoins(-cost, "買好了！新衣服很適合你"); sfx("buy"); }
   my.look = cleanLook(wDraft);
-  const nm = cleanStr($("wName").value, 12); my.name = nm || my.name || SPECIES[my.look.sp].n;
+  const nm = cleanStr($("wName").value, 12); my.name = nm || my.name || tr(SPECIES[my.look.sp].n);
   store.set("mq.v2", 1);
   markDirty(true); pushPresence(true); wPrevOn = false; $("mWard").hidden = true; spriteCache.clear();
   if (firstVisitOpen){ firstVisitOpen = false; sysMsg("歡迎來到毛球共工村，" + my.name + "！走進咖啡廳坐下專注，就能賺金幣買傢俱。"); }
 });
-function wardClosed(){ wPrevOn = false; if (firstVisitOpen){ firstVisitOpen = false; store.set("mq.v2", 1); if (!my.name){ my.name = SPECIES[my.look.sp].n; markDirty(true); } } }
+function wardClosed(){ wPrevOn = false; if (firstVisitOpen){ firstVisitOpen = false; store.set("mq.v2", 1); if (!my.name){ my.name = tr(SPECIES[my.look.sp].n); markDirty(true); } } }
 $("wName").addEventListener("keydown", e => e.stopPropagation());
 const wPrevX = $("wPrev").getContext("2d");
 function drawWPrev(t){ const c = wPrevX; c.setTransform(1,0,0,1,0,0); c.clearRect(0,0,400,440); c.setTransform(3.2,0,0,3.2,200,400); ov(c,0,0,22,4.5,"rgba(91,88,86,.15)"); drawPet(c,0,0,wDraft,{t,noShadow:true}); }
@@ -1772,7 +1855,7 @@ async function openFriends(){
 }
 
 /* =================== coworking: pomodoro & stats =================== */
-const WORK = 25*60*1000, BREAK = 5*60*1000;
+let WORK = SET.work*60*1000, BREAK = SET.brk*60*1000;
 const pomo = Object.assign({mode:"work", running:false, end:0, left:WORK, round:1}, store.get("mq.pomo") || {});
 if (pomo.running && pomo.end < Date.now()) Object.assign(pomo, {mode:"work", running:false, left:WORK});
 let audioCtx = null;
@@ -1784,14 +1867,36 @@ function sfx(kind){
   } catch {}
 }
 const fmt = ms => { const s = Math.max(0, Math.ceil(ms/1000)); return String(Math.floor(s/60)).padStart(2,"0") + ":" + String(s%60).padStart(2,"0"); };
-function renderPomo(){ const left = pomo.running ? pomo.end - Date.now() : pomo.left; $("ptime").textContent = fmt(left); $("pmode").textContent = pomo.mode === "work" ? "專注" : "休息"; $("pgo").textContent = pomo.running ? "❚❚" : "▶"; $("pgo").setAttribute("aria-label", pomo.running ? "暫停番茄鐘" : "開始番茄鐘"); }
+function renderPomo(){ const left = pomo.running ? pomo.end - Date.now() : pomo.left; $("ptime").textContent = fmt(left); $("pmini").textContent = fmt(left); $("pmode").textContent = pomo.mode === "work" ? "專注" : "休息"; $("pgo").textContent = pomo.running ? "❚❚" : "▶"; $("pgo").setAttribute("aria-label", pomo.running ? "暫停番茄鐘" : "開始番茄鐘"); const pm = $("pomo"); pm.classList.toggle("run", pomo.running); pm.classList.toggle("brk", pomo.mode !== "work"); $("pico").setAttribute("aria-expanded", pm.classList.contains("open") ? "true" : "false"); }
 function pomoToggle(){ if (pomo.running){ pomo.left = Math.max(0, pomo.end - Date.now()); pomo.running = false; } else { pomo.end = Date.now() + pomo.left; pomo.running = true; sfx("pop"); if (pomo.mode === "work" && me.status !== "meeting") setStatus("focus"); } store.set("mq.pomo", pomo); pushPresence(true); renderPomo(); }
 function pomoReset(){ Object.assign(pomo, {mode:"work", running:false, left:WORK, round:1}); store.set("mq.pomo", pomo); pushPresence(true); renderPomo(); }
-$("pgo").addEventListener("click", pomoToggle); $("preset").addEventListener("click", pomoReset);
+$("pgo").addEventListener("click", () => { pomoToggle(); if (pomo.running) setTimeout(() => { $("pomo").classList.remove("open"); renderPomo(); }, 900); }); $("preset").addEventListener("click", pomoReset);
+$("pico").addEventListener("click", () => { $("pomo").classList.toggle("open"); renderPomo(); });
+document.addEventListener("pointerdown", e => { const pm = $("pomo"); if (pm.classList.contains("open") && !pm.contains(e.target)){ pm.classList.remove("open"); renderPomo(); } });
+/* settings */
+function saveSet(){ store.set("mq.set", SET); }
+function renderSet(){
+  document.querySelectorAll("#setLang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === LANG ? "true" : "false"));
+  const sw = (id, on) => $(id).setAttribute("aria-checked", on ? "true" : "false");
+  sw("setSnd", sndOn); sw("setNames", !!SET.names); sw("setLow", !!SET.low);
+  $("setWv").textContent = SET.work; $("setBv").textContent = SET.brk;
+}
+function applyDur(){ WORK = SET.work*60*1000; BREAK = SET.brk*60*1000; if (!pomo.running){ pomo.left = pomo.mode === "work" ? WORK : BREAK; store.set("mq.pomo", pomo); } renderPomo(); }
+$("setBtn").addEventListener("click", () => { renderSet(); openModal("mSet"); });
+document.querySelectorAll("#setLang button").forEach(b => b.addEventListener("click", () => { if (b.dataset.v === LANG) return; SET.lang = b.dataset.v; saveSet(); try { store.set("mq.doc", my); } catch {} setTimeout(() => location.reload(), 60); }));
+$("setSnd").addEventListener("click", () => { toggleSound(); renderSet(); });
+$("setNames").addEventListener("click", () => { SET.names = SET.names ? 0 : 1; saveSet(); renderSet(); });
+$("setLow").addEventListener("click", () => { SET.low = SET.low ? 0 : 1; saveSet(); renderSet(); });
+$("setWm").addEventListener("click", () => { SET.work = Math.max(5, SET.work - 5); saveSet(); applyDur(); renderSet(); });
+$("setWp").addEventListener("click", () => { SET.work = Math.min(90, SET.work + 5); saveSet(); applyDur(); renderSet(); });
+$("setBm").addEventListener("click", () => { SET.brk = Math.max(1, SET.brk - 1); saveSet(); applyDur(); renderSet(); });
+$("setBp").addEventListener("click", () => { SET.brk = Math.min(30, SET.brk + 1); saveSet(); applyDur(); renderSet(); });
+$("setWard").addEventListener("click", () => { closeModals(); openWardrobe(false); });
+$("setPReset").addEventListener("click", () => { pomoReset(); toast("已重設番茄鐘"); });
 function pomoTick(){
   if (pomo.running && Date.now() >= pomo.end){
     sfx("chime");
-    if (pomo.mode === "work"){ pomo.mode = "break"; pomo.left = BREAK; addCoins(50, "完成一顆番茄！+50 金幣，起來伸展 5 分鐘吧"); bumpMood(5); if (me.status === "focus") setStatus("break"); }
+    if (pomo.mode === "work"){ pomo.mode = "break"; pomo.left = BREAK; addCoins(50, "完成一顆番茄！+50 金幣，起來伸展 " + SET.brk + " 分鐘吧"); bumpMood(5); if (me.status === "focus") setStatus("break"); }
     else { pomo.mode = "work"; pomo.left = WORK; pomo.round++; toast("休息結束，第 " + pomo.round + " 顆番茄開始"); if (me.status === "break") setStatus("focus"); }
     pomo.end = Date.now() + pomo.left; store.set("mq.pomo", pomo); pushPresence(true);
   }
@@ -1992,6 +2097,7 @@ const myPeer = () => { if (!room) return null; const p = room.peers().find(x => 
 
 /* =================== draw & guess =================== */
 const WORDS = ["咖啡","筆電","番茄","貓咪","彩虹","雨傘","蛋糕","時鐘","香蕉","鉛筆","火箭","房子","太陽","西瓜","眼鏡","耳機","書本","氣球","小魚","星星","兔子","冰淇淋","月亮","雲朵","花朵","椅子","鑰匙","汽車","大樹","手機","便當","珍珠奶茶","鳳梨","企鵝","雪人"];
+if (LANG === "en") for (let i = 0; i < WORDS.length; i++) WORDS[i] = tr(WORDS[i]).toLowerCase();
 const DG_COLS = [INK,C.orange,C.yellow,C.blue,C.green,C.pink];
 let dg = {r:null, active:false, drawer:null, drawerName:"", len:0, ends:0, word:null, mine:false}, gameOpen = false, dgThumb = null, dgColor = DG_COLS[0];
 const dgCv = $("dgCv"), dgX = dgCv.getContext("2d");
@@ -2053,7 +2159,7 @@ function onDg(tp, m){
   else if (tp === "dg.guess"){
     if (d.r !== dg.r || !dg.active) return;
     const t = cleanStr(d.t,20), n = cleanStr(d.n,12) || "某人"; if (!t) return;
-    const ok = dg.mine && t.replace(/\s/g,"") === dg.word;
+    const ok = dg.mine && t.replace(/\s/g,"").toLowerCase() === String(dg.word).replace(/\s/g,"").toLowerCase();
     dgGuessAdd(n, ok ? "猜中了！" : t, ok);
     if (ok){ const win = {r:dg.r, w:dg.word, wp:m.peer, wn:n}; room.emit("dg.win", win).catch(()=>{}); addCoins(20, n + " 猜中了！你得到 20 金幣"); dgFinish(win); }
   } else if (tp === "dg.win"){
@@ -2085,7 +2191,7 @@ function collectPeople(now){
   for (const r of remotes.values()) if (r.sc === sceneKey) people.push({x:r.rx, y:r.ry, lk:r.lk, a:r.a, f:r.f, back:!!r.b, s:r.s, n:r.n, ph:r.ph, seat:r.seat, bubble: now < r.bubbleUntil ? r.bubble : null, em: now < r.emUntil ? r.em : null, wave: now < r.waveUntil, pm:r.pm, me:false});
   for (const [i,P] of patronList().entries()){ const sd = world.seats.find(x => x.id === P.seat); if (!sd) continue; if (!P.nextSay) P.nextSay = now + 3000 + i*7000;
     if (now > P.nextSay){ P.bubble = P.say[Math.floor(Math.random()*P.say.length)]; P.bubbleUntil = now + 4500; P.nextSay = now + 22000 + Math.random()*35000; }
-    people.push({x:sd.x, y:sd.y, lk:P.lk, a:"sit", f:sd.face || 1, back:!!sd.back, s:"focus", n:P.n+"・常客", ph:i*3+1, seat:P.seat, bubble: now < (P.bubbleUntil||0) ? P.bubble : null, em:null, wave:false, pm:null, me:false}); }
+    people.push({x:sd.x, y:sd.y, lk:P.lk, a:"sit", f:sd.face || 1, back:!!sd.back, s:"focus", tn:1, n:P.n+"・常客", ph:i*3+1, seat:P.seat, bubble: now < (P.bubbleUntil||0) ? P.bubble : null, em:null, wave:false, pm:null, me:false}); }
   people.push({x:pl.x, y:pl.y, lk:my.look, a:pl.anim, f:pl.face, back:!!pl.back, s:me.status, n:my.name || "我", ph:0, seat:pl.seat, bubble: now < myBubbleUntil ? myBubble : null, em: now < myEmUntil ? lastEm.e : null, wave: now < waveUntil, pm: pomo.running ? {m:pomo.mode, e:pomo.end} : null, me:true});
   return people;
 }
@@ -2099,14 +2205,14 @@ function drawLabels(people, t, k){
     const fpx = clamp(Math.round(S*4.2*k + 3), 11, 14);
     gx.font = `800 ${fpx}px ${FONT}`;
     const tw = gx.measureText(p.n).width, h = fpx*1.55, w = tw + h + 12, x0 = sx - w/2, y0 = fy;
-    WOB = 0; rr(gx, x0, y0, w, h, h/2, "#f7f3df", p.me ? C.orange : INK, p.me ? 1.6 : 1.1);
-    ov(gx, x0 + h/2 + 2, y0 + h/2, h*0.24, h*0.24, STATUS[p.s].c, INK, 0.8);
-    txt(gx, p.n, x0 + h + 5, y0 + h/2 + 0.5, fpx, INK, 800, "left");
+    WOB = 0; if (SET.names) rr(gx, x0, y0, w, h, h/2, "#f7f3df", p.me ? C.orange : INK, p.me ? 1.6 : 1.1);
+    if (SET.names) ov(gx, x0 + h/2 + 2, y0 + h/2, h*0.24, h*0.24, STATUS[p.s].c, INK, 0.8);
+    if (SET.names) txt(gx, p.n, x0 + h + 5, y0 + h/2 + 0.5, fpx, INK, 800, "left");
     let topY = sy;
     if (p.pm){ const pt = (p.pm.m === "work" ? "專注 " : "休息 ") + fmt(p.pm.e - Date.now()); gx.font = `800 ${fpx-2}px ${FONT}`; const pw = gx.measureText(pt).width + 18, ph = (fpx-2)*1.5; rr(gx, sx-pw/2, topY-ph-4, pw, ph, ph/2, p.pm.m === "work" ? C.orange : C.green, INK, 1); txt(gx, pt, sx, topY-ph/2-4, fpx-2, "#fff", 800); topY -= ph + 4; }
     if (p.em){ const bob = Math.sin(t*6)*2, r = fpx*1.3, ex = sx + 30*S*k, ey = sy + 18*S*k + bob; ov(gx, ex, ey, r, r, "#f7f3df", INK, 1.1); drawEmoteIcon(gx, p.em, ex, ey, r*0.8); }
-    if (p.bubble){ gx.font = `700 ${fpx}px ${FONT}`; const lines = wrapLines(gx, p.bubble, Math.min(220, cw*0.55)); const lh = fpx*1.45, bw = Math.max(...lines.map(l => gx.measureText(l).width)) + 26, bh = lines.length*lh + 14; const bx = clamp(sx - bw/2, 8, cw - bw - 8), by = topY - bh - 12; WOB = 1; rr(gx, bx, by, bw, bh, 16, "#f7f3df", INK, 1.2); poly(gx, [sx-6, by+bh-1, sx+6, by+bh-1, sx-2, by+bh+9], "#f7f3df"); line(gx,[sx-6,by+bh,sx-2,by+bh+9,sx+6,by+bh],INK,1.2); WOB = 0; lines.forEach((l,i) => txt(gx, l, bx+13, by+7+lh*(i+0.5), fpx, INK, 700, "left")); }
-    WOB = 1;
+    if (p.bubble){ RAW = !p.tn; gx.font = `700 ${fpx}px ${FONT}`; const lines = wrapLines(gx, p.bubble, Math.min(220, cw*0.55)); const lh = fpx*1.45, bw = Math.max(...lines.map(l => gx.measureText(l).width)) + 26, bh = lines.length*lh + 14; const bx = clamp(sx - bw/2, 8, cw - bw - 8), by = topY - bh - 12; WOB = 1; rr(gx, bx, by, bw, bh, 16, "#f7f3df", INK, 1.2); poly(gx, [sx-6, by+bh-1, sx+6, by+bh-1, sx-2, by+bh+9], "#f7f3df"); line(gx,[sx-6,by+bh,sx-2,by+bh+9,sx+6,by+bh],INK,1.2); WOB = 0; lines.forEach((l,i) => txt(gx, l, bx+13, by+7+lh*(i+0.5), fpx, INK, 700, "left")); }
+    WOB = 1; RAW = false;
   }
 }
 function hoverLabel(){
@@ -2115,8 +2221,8 @@ function hoverLabel(){
   if (decorOn){ cv.style.cursor = decorItemAt(wx,wy) ? "grab" : "default"; return; }
   const hr = remoteAt(wx,wy), ho = hr ? null : objAt(wx,wy);
   cv.style.cursor = (ho || hr) ? "pointer" : "default";
-  const lab = hr ? "看看 " + hr.n : (ho && ho.label);
-  if (lab){ WOB = 0; gx.font = `800 13px ${FONT}`; const w = gx.measureText(lab).width + 22; const lx = clamp(ptr.x + 14, 8, cw - w - 8), ly = ptr.y - 34; rr(gx, lx, ly, w, 26, 13, INK); txt(gx, lab, lx + w/2, ly + 13.5, 13, "#f7f3df", 800); WOB = 1; }
+  const lab = hr ? tr("看看 ") + hr.n : (ho && ho.label);
+  if (lab){ WOB = 0; RAW = !!hr; gx.font = `800 13px ${FONT}`; const w = gx.measureText(lab).width + 22; const lx = clamp(ptr.x + 14, 8, cw - w - 8), ly = ptr.y - 34; rr(gx, lx, ly, w, 26, 13, INK); txt(gx, lab, lx + w/2, ly + 13.5, 13, "#f7f3df", 800); WOB = 1; RAW = false; }
 }
 function cafeNpc(n,t){
   if (n.k === "barista"){ if (performance.now() < brewUntil) return {x:566, y:160, face:-1, anim:"idle", brew:true, cup:false, wave:false}; const u = Math.sin(t*0.4), s = clamp(u*1.7,-1,1), paused = Math.abs(s) >= 0.98; return {x:605+s*42, y:160, face: paused ? (s<0?-1:1) : (Math.cos(t*0.4)>0?1:-1), anim: paused ? "idle" : "walk", brew: paused && s<0, cup: paused, wave:false}; }
@@ -2218,7 +2324,7 @@ function frameRoom(now, t, dt){
 }
 let lastDraw = 0;
 function frame(now){
-  if (!document.hasFocus() && now - lastDraw < 100){ requestAnimationFrame(frame); return; } lastDraw = now;
+  if ((SET.low || !document.hasFocus()) && now - lastDraw < (document.hasFocus() ? 66 : 100)){ requestAnimationFrame(frame); return; } lastDraw = now;
   const dt = Math.min(1/30, (now - last)/1000); last = now; const t = now/1000;
   if (wPrevOn) drawWPrev(t);
   if (Date.now() - roomCacheAt > 60000){ roomCacheAt = Date.now(); if (scene && scene.kind === "room") roomCache.clear(); }
